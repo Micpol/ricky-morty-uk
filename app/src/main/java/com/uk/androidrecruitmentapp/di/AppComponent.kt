@@ -5,6 +5,7 @@ import com.uk.androidrecruitmentapp.ARApplication
 import com.uk.androidrecruitmentapp.di.contribute.ActivityContributeModule
 import com.uk.androidrecruitmentapp.di.module.AppModule
 import com.uk.androidrecruitmentapp.di.module.NetworkModule
+import com.uk.androidrecruitmentapp.di.viewModel.ViewModelModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
@@ -17,7 +18,8 @@ import javax.inject.Singleton
             AndroidSupportInjectionModule::class,
             AppModule::class,
             NetworkModule::class,
-            ActivityContributeModule::class
+            ActivityContributeModule::class,
+            ViewModelModule::class
         ]
 )
 interface AppComponent : AndroidInjector<ARApplication> {
