@@ -1,14 +1,12 @@
 package com.uk.androidrecruitmentapp.ui
 
-import androidx.recyclerview.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.uk.androidrecruitmentapp.R
 import com.uk.androidrecruitmentapp.data.local.Episodes
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_item.episode_name
+import kotlinx.android.synthetic.main.view_item.*
 
 class EpisodeAdapter(private val episodes: Episodes) : androidx.recyclerview.widget.RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHolder>() {
 
