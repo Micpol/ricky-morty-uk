@@ -1,4 +1,4 @@
-package com.uk.androidrecruitmentapp.ui
+package com.uk.androidrecruitmentapp.feature.episodes
 
 import android.view.LayoutInflater
 import android.view.View
