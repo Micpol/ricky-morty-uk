@@ -36,8 +36,9 @@ androidExtensions {
 ext {
     dagger = "2.25.2"
     retrofit = "2.6.2"
+    navigation = "2.1.0"
+    constraintLayout = "1.1.3"
 }
-
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -45,9 +46,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:1.1.0"
     implementation "androidx.recyclerview:recyclerview:1.0.0"
-    testImplementation "junit:junit:4.12"
-    androidTestImplementation "androidx.test:runner:1.2.0"
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
+
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayout"
 
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit"
@@ -61,6 +61,13 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$dagger"
     kapt "com.google.dagger:dagger-compiler:$dagger"
 
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation"
+
     androidTestImplementation "com.google.dagger:dagger:$dagger"
     kaptAndroidTest "com.google.dagger:dagger-compiler:$dagger"
+    testImplementation "junit:junit:4.12"
+    androidTestImplementation "androidx.test:runner:1.2.0"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
+
 }
