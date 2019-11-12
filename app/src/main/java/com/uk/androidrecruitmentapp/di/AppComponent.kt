@@ -4,18 +4,19 @@ import android.app.Application
 import com.uk.androidrecruitmentapp.ARApplication
 import com.uk.androidrecruitmentapp.di.contribute.ActivityContributeModule
 import com.uk.androidrecruitmentapp.di.module.AppModule
+import com.uk.androidrecruitmentapp.di.module.NetworkModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
-
 @Singleton
 @Component(
         modules = [
             AndroidSupportInjectionModule::class,
             AppModule::class,
+            NetworkModule::class,
             ActivityContributeModule::class
         ]
 )

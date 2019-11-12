@@ -1,17 +1,16 @@
 package com.uk.androidrecruitmentapp.ui
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.uk.androidrecruitmentapp.ARApplication
+import com.uk.androidrecruitmentapp.BaseActivity
 import com.uk.androidrecruitmentapp.R
 import com.uk.androidrecruitmentapp.data.remote.ApiService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.main_activity.list
+import kotlinx.android.synthetic.main.main_activity.*
 import javax.inject.Inject
 
-class EpisodesActivity : AppCompatActivity() {
+class EpisodesActivity : BaseActivity() {
 
     @Inject
     lateinit var service: ApiService
