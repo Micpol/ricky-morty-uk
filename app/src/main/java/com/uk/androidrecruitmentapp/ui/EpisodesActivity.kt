@@ -19,7 +19,6 @@ class EpisodesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-        ARApplication.apiComponent.inject(this)
 
         initAdapter()
         fetchEpisodeFromRemote()
