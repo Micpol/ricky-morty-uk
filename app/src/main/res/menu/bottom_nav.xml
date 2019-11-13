@@ -3,20 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/episodesFragment"
+        android:icon="@drawable/ic_episodes"
         android:orderInCategory="1"
-        android:title="Episodes"
-        app:showAsAction="always" />
+        android:title="@string/episodes"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/charactersFragment"
+        android:icon="@drawable/ic_characters"
         android:orderInCategory="2"
-        android:title="Characters"
-        app:showAsAction="always" />
+        android:title="@string/characters"
+        app:showAsAction="ifRoom" />
 
 
     <item
         android:id="@+id/locationsFragment"
+        android:icon="@drawable/ic_locations"
         android:orderInCategory="2"
-        android:title="Locations"
-        app:showAsAction="always" />
+        android:title="@string/locations"
+        app:showAsAction="ifRoom" />
 </menu>

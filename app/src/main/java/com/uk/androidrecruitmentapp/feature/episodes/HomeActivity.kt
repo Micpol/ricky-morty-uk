@@ -21,7 +21,7 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun setupNavigation() {
-        NavigationUI.setupWithNavController(bttm_nav,
-                findNavController(R.id.mainNavigationFragment))
+        NavigationUI.setupWithNavController(mainBottomNavBar,
+                findNavController(R.id.mainNavFragment))
     }
 }
