@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.EpisodesActivity"/>
+        <activity android:name=".feature.episodes.HomeActivity"/>
 
     </application>
 
