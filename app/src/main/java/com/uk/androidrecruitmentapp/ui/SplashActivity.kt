@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.uk.androidrecruitmentapp.R
-import com.uk.androidrecruitmentapp.feature.episodes.HomeActivity
+import com.uk.androidrecruitmentapp.feature.HomeActivity
 
 class SplashActivity : Activity() {
 

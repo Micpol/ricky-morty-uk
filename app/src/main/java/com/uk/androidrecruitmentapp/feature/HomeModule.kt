@@ -1,6 +1,7 @@
-package com.uk.androidrecruitmentapp.feature.episodes
+package com.uk.androidrecruitmentapp.feature
 
 import com.uk.androidrecruitmentapp.feature.characters.CharactersFragment
+import com.uk.androidrecruitmentapp.feature.episodes.EpisodesFragment
 import com.uk.androidrecruitmentapp.feature.locations.LocationsFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

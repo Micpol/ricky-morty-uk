@@ -1,7 +1,7 @@
 package com.uk.androidrecruitmentapp.di.contribute
 
-import com.uk.androidrecruitmentapp.feature.episodes.HomeActivity
-import com.uk.androidrecruitmentapp.feature.episodes.HomeModule
+import com.uk.androidrecruitmentapp.feature.HomeActivity
+import com.uk.androidrecruitmentapp.feature.HomeModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
