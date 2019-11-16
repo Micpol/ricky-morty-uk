@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.uk.androidrecruitmentapp.BaseFragment
 import com.uk.androidrecruitmentapp.R
 import com.uk.androidrecruitmentapp.data.remote.ApiService
@@ -26,15 +27,21 @@ class EpisodesFragment : BaseFragment() {
 
     private val viewModel: EpisodesVM by lazy { getVM<EpisodesVM>(viewModelFactory) }
 
+    private val episodesAdapter by lazy { EpisodeAdapter() }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_episodes, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        episodesRV.apply {
+            adapter = episodesAdapter
+            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        }
 
-        initAdapter()
         fetchEpisodeFromRemote()
+
     }
 
     private fun fetchEpisodeFromRemote() {
@@ -42,13 +49,7 @@ class EpisodesFragment : BaseFragment() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    val adapter = EpisodeAdapter()
-                    list.adapter = adapter
-                    adapter.submitData(it.results.toMutableList())
+                    episodesAdapter.submitData(it.results.toMutableList())
                 }, {})
-    }
-
-    private fun initAdapter() {
-        list.layoutManager = LinearLayoutManager(context)
     }
 }
