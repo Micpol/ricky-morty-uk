@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.uk.androidrecruitmentapp.BaseFragment
 import com.uk.androidrecruitmentapp.R
-import com.uk.androidrecruitmentapp.data.remote.ApiService
 import com.uk.androidrecruitmentapp.feature.episodes.list.EpisodeAdapter
 import com.uk.androidrecruitmentapp.utils.getVM
 import kotlinx.android.synthetic.main.fragment_episodes.*
@@ -35,6 +34,13 @@ class EpisodesFragment : BaseFragment() {
             adapter = episodesAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         }
+        viewModel.progressVisibility.observe(this, Observer {
+            if (it) {
+                listLoaderPB.visibility = View.VISIBLE
+            } else {
+                listLoaderPB.visibility = View.GONE
+            }
+        })
         viewModel.episodesList.observe(this, Observer {
             episodesAdapter.submitData(it.toMutableList())
         })
