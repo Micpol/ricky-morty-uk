@@ -1,4 +1,4 @@
-package com.uk.androidrecruitmentapp.feature.episodes
+package com.uk.androidrecruitmentapp.feature
 
 import android.os.Bundle
 import androidx.navigation.findNavController
