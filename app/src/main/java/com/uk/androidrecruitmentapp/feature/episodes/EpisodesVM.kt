@@ -1,9 +1,6 @@
 package com.uk.androidrecruitmentapp.feature.episodes
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.uk.androidrecruitmentapp.data.livedata.MutableSingleLiveEvent
 import com.uk.androidrecruitmentapp.data.livedata.SingleLiveEvent
 import com.uk.androidrecruitmentapp.data.local.Result
@@ -38,9 +35,28 @@ class EpisodesVMImpl @Inject constructor(
         }
     }
 
+    override val episodesList by lazy {
+        episodes.map {
+            if (it is Resource.Success) {
+                it.data
+            } else {
+                onError(it)
+                emptyList()
+            }
+        }
+    }
+    override val progressVisibility by lazy {
+        episodes.map {
+            it is Resource.Loading
+        }
+    }
 
-    override val episodesList = MutableLiveData<List<Result>>()
-    override val progressVisibility = MutableLiveData<Boolean>()
-    override val toastMessage = MutableSingleLiveEvent<String>()
+    override val toastMessage by lazy { MutableSingleLiveEvent<String>() }
+
+    private fun onError(resource: Resource<List<Result>>?) {
+        if (resource is Resource.Error) {
+            toastMessage.postValue(resource.error.message)
+        }
+    }
 
 }
