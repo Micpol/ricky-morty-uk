@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.uk.androidrecruitmentapp.BaseFragment
 import com.uk.androidrecruitmentapp.R
 import com.uk.androidrecruitmentapp.data.remote.ApiService
+import com.uk.androidrecruitmentapp.utils.getVM
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_episodes.*
@@ -17,6 +19,11 @@ class EpisodesFragment : BaseFragment() {
 
     @Inject
     lateinit var service: ApiService
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel: EpisodesVM by lazy { getVM<EpisodesVM>(viewModelFactory) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_episodes, container, false)
