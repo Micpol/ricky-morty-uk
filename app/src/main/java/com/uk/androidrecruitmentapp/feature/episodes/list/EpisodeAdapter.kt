@@ -1,4 +1,4 @@
-package com.uk.androidrecruitmentapp.feature.episodes
+package com.uk.androidrecruitmentapp.feature.episodes.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

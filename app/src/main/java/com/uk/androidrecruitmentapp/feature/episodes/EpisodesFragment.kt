@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.uk.androidrecruitmentapp.BaseFragment
 import com.uk.androidrecruitmentapp.R
 import com.uk.androidrecruitmentapp.data.remote.ApiService
+import com.uk.androidrecruitmentapp.feature.episodes.list.EpisodeAdapter
 import com.uk.androidrecruitmentapp.utils.getVM
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
