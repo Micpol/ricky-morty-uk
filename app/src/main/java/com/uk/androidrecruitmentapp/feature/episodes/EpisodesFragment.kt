@@ -41,8 +41,9 @@ class EpisodesFragment : BaseFragment() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    list.adapter = EpisodeAdapter(it)
-                    (list.adapter as EpisodeAdapter).notifyDataSetChanged()
+                    val adapter = EpisodeAdapter()
+                    list.adapter = adapter
+                    adapter.submitData(it.results.toMutableList())
                 }, {})
     }
 
