@@ -40,14 +40,22 @@ class EpisodesVMImpl @Inject constructor(
             if (it is Resource.Success) {
                 it.data
             } else {
+                onError(it)
                 emptyList()
             }
         }
     }
-    override val toastMessage = MutableSingleLiveEvent<String>()
     override val progressVisibility by lazy {
         episodes.map {
             it is Resource.Loading
+        }
+    }
+
+    override val toastMessage by lazy { MutableSingleLiveEvent<String>() }
+
+    private fun onError(resource: Resource<List<Result>>?) {
+        if (resource is Resource.Error) {
+            toastMessage.postValue(resource.error.message)
         }
     }
 

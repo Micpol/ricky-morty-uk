@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,10 +31,18 @@ class EpisodesFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupList()
+        observe()
+    }
+
+    private fun setupList() {
         episodesRV.apply {
             adapter = episodesAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         }
+    }
+
+    private fun observe() {
         viewModel.progressVisibility.observe(this, Observer {
             if (it) {
                 listLoaderPB.visibility = View.VISIBLE
@@ -43,6 +52,9 @@ class EpisodesFragment : BaseFragment() {
         })
         viewModel.episodesList.observe(this, Observer {
             episodesAdapter.submitData(it.toMutableList())
+        })
+        viewModel.toastMessage.observe(this, Observer { errorMsgResId ->
+            context?.let { Toast.makeText(it, errorMsgResId, Toast.LENGTH_SHORT).show() }
         })
     }
 }
