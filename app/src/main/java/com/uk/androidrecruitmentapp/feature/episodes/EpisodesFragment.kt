@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,15 +13,10 @@ import com.uk.androidrecruitmentapp.R
 import com.uk.androidrecruitmentapp.data.remote.ApiService
 import com.uk.androidrecruitmentapp.feature.episodes.list.EpisodeAdapter
 import com.uk.androidrecruitmentapp.utils.getVM
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_episodes.*
 import javax.inject.Inject
 
 class EpisodesFragment : BaseFragment() {
-
-    @Inject
-    lateinit var service: ApiService
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -39,17 +35,8 @@ class EpisodesFragment : BaseFragment() {
             adapter = episodesAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         }
-
-        fetchEpisodeFromRemote()
-
-    }
-
-    private fun fetchEpisodeFromRemote() {
-        service.getPeople()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    episodesAdapter.submitData(it.results.toMutableList())
-                }, {})
+        viewModel.episodesList.observe(this, Observer {
+            episodesAdapter.submitData(it.toMutableList())
+        })
     }
 }

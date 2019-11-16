@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+
 import com.uk.androidrecruitmentapp.data.livedata.MutableSingleLiveEvent
 import com.uk.androidrecruitmentapp.data.livedata.SingleLiveEvent
 import com.uk.androidrecruitmentapp.data.local.Result
@@ -38,8 +40,15 @@ class EpisodesVMImpl @Inject constructor(
         }
     }
 
-
-    override val episodesList = MutableLiveData<List<Result>>()
+    override val episodesList by lazy {
+        episodes.map {
+            if (it is Resource.Success) {
+                it.data
+            } else {
+                emptyList()
+            }
+        }
+    }
     override val progressVisibility = MutableLiveData<Boolean>()
     override val toastMessage = MutableSingleLiveEvent<String>()
 
