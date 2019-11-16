@@ -17,9 +17,13 @@ class EpisodeAdapter() : androidx.recyclerview.widget.RecyclerView.Adapter<Episo
 
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
         val episode = episodesResults[position]
-        holder.bind(episode.name)
+        holder.bind(episode)
     }
 
+    override fun onViewRecycled(holder: EpisodeViewHolder) {
+        super.onViewRecycled(holder)
+        holder.clear()
+    }
     override fun getItemCount(): Int {
         return episodesResults.size
     }
