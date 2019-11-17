@@ -2,6 +2,8 @@ package com.uk.androidrecruitmentapp.di.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.uk.androidrecruitmentapp.feature.characters.CharactersVM
+import com.uk.androidrecruitmentapp.feature.characters.CharactersVMImpl
 import com.uk.androidrecruitmentapp.feature.episodes.EpisodesVM
 import com.uk.androidrecruitmentapp.feature.episodes.EpisodesVMImpl
 import dagger.Binds
@@ -17,6 +19,11 @@ abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(EpisodesVM::class)
-    abstract fun provideCurriculumVitaeVM(vm: EpisodesVMImpl): ViewModel
+    abstract fun provideEpisodesVM(vm: EpisodesVMImpl): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CharactersVM::class)
+    abstract fun provideCharactersVM(vm: CharactersVMImpl): ViewModel
 
 }
