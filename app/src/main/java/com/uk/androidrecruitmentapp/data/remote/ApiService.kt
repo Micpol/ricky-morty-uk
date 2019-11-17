@@ -7,6 +7,7 @@ import com.uk.androidrecruitmentapp.data.local.RickyAndMortyResponse
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface ApiService {
 
@@ -17,6 +18,6 @@ interface ApiService {
     fun loadCharactersAsync(): Deferred<Response<RickyAndMortyResponse<Character>>>
 
     @GET("location/")
-    fun loadLocationsAsync(): Deferred<Response<RickyAndMortyResponse<Location>>>
+    fun loadLocationsAsync(@Query("page") page: Int? = null): Deferred<Response<RickyAndMortyResponse<Location>>>
 
 }

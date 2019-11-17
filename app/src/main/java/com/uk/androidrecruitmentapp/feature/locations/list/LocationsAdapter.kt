@@ -30,7 +30,6 @@ class LocationsAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<Locat
     }
 
     fun submitData(data: MutableList<Location>) {
-        locationResults.clear()
         locationResults.addAll(data)
         notifyDataSetChanged()
     }
