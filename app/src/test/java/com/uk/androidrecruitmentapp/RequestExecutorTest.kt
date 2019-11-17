@@ -1,6 +1,8 @@
 package com.uk.androidrecruitmentapp
 
+import com.uk.androidrecruitmentapp.data.local.Episode
 import com.uk.androidrecruitmentapp.data.local.Episodes
+import com.uk.androidrecruitmentapp.data.local.RickyAndMortyResponse
 import com.uk.androidrecruitmentapp.data.remote.ApiService
 import com.uk.androidrecruitmentapp.data.remote.RequestExecutor
 import com.uk.androidrecruitmentapp.data.remote.response.ApiResponse
@@ -20,7 +22,7 @@ class RequestExecutorTest {
     private val service = mockk<ApiService> {
         every { loadEpisodesAsync() } returns CompletableDeferred()
     }
-    private val response = mockk<Episodes>()
+    private val response = mockk<RickyAndMortyResponse<Episode>>()
 
     private val requestExecutor = RequestExecutor()
 

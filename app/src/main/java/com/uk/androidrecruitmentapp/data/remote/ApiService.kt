@@ -1,8 +1,9 @@
 package com.uk.androidrecruitmentapp.data.remote
 
-import com.uk.androidrecruitmentapp.data.local.Characters
-import com.uk.androidrecruitmentapp.data.local.Episodes
-import com.uk.androidrecruitmentapp.data.local.Locations
+import com.uk.androidrecruitmentapp.data.local.Character
+import com.uk.androidrecruitmentapp.data.local.Episode
+import com.uk.androidrecruitmentapp.data.local.Location
+import com.uk.androidrecruitmentapp.data.local.RickyAndMortyResponse
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.GET
@@ -10,12 +11,12 @@ import retrofit2.http.GET
 interface ApiService {
 
     @GET("episode/")
-    fun loadEpisodesAsync(): Deferred<Response<Episodes>>
+    fun loadEpisodesAsync(): Deferred<Response<RickyAndMortyResponse<Episode>>>
 
     @GET("character/")
-    fun loadCharactersAsync(): Deferred<Response<Characters>>
+    fun loadCharactersAsync(): Deferred<Response<RickyAndMortyResponse<Character>>>
 
     @GET("location/")
-    fun loadLocationsAsync(): Deferred<Response<Locations>>
+    fun loadLocationsAsync(): Deferred<Response<RickyAndMortyResponse<Location>>>
 
 }
