@@ -74,7 +74,7 @@ class LocationsVMImpl @Inject constructor(
     }
 
     override fun onListScrolled(lastCompletelyVisibleItemPosition: Int, itemCount: Int) {
-        if (isLoadingMore || isThereNextPage) return
+        if (isLoadingMore || !isThereNextPage) return
         if (lastCompletelyVisibleItemPosition == itemCount - 1) {
             isLoadingMore = true
             loadingMoreVisibility.postValue(isLoadingMore)
