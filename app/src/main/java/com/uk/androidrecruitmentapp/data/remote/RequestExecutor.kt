@@ -1,19 +1,21 @@
 package com.uk.androidrecruitmentapp.data.remote
 
 import com.uk.androidrecruitmentapp.data.remote.response.ApiResponse
+import kotlinx.coroutines.Deferred
 import retrofit2.HttpException
 import retrofit2.Response
 import javax.inject.Inject
 
 class RequestExecutor @Inject constructor() {
 
-    fun <T : Any> execute(call: Response<T>): ApiResponse<T> {
+    suspend fun <T : Any> execute(call: Deferred<Response<T>>): ApiResponse<T> {
         return try {
-            if (call.isSuccessful) {
+            val response = call.await()
+            if (response.isSuccessful) {
                 @Suppress("UNCHECKED_CAST")
-                ApiResponse.Success(call.body() ?: Unit as T)
+                ApiResponse.Success(response.body() ?: Unit as T)
             } else {
-                ApiResponse.Error(HttpException(call))
+                ApiResponse.Error(HttpException(response))
             }
         } catch (httpException: HttpException) {
             ApiResponse.Error(httpException)
