@@ -3,15 +3,15 @@ package com.uk.androidrecruitmentapp.feature.episodes.list
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.uk.androidrecruitmentapp.R
-import com.uk.androidrecruitmentapp.data.local.Result
+import com.uk.androidrecruitmentapp.data.local.Episode
 import com.uk.androidrecruitmentapp.feature.episodes.list.viewholder.EpisodeViewHolder
 
 class EpisodeAdapter() : androidx.recyclerview.widget.RecyclerView.Adapter<EpisodeViewHolder>() {
 
-    private val episodesResults = mutableListOf<Result>()
+    private val episodesResults = mutableListOf<Episode>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EpisodeViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.view_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.episodes_item, parent, false)
         return EpisodeViewHolder(view)
     }
 
@@ -24,11 +24,12 @@ class EpisodeAdapter() : androidx.recyclerview.widget.RecyclerView.Adapter<Episo
         super.onViewRecycled(holder)
         holder.clear()
     }
+
     override fun getItemCount(): Int {
         return episodesResults.size
     }
 
-    fun submitData(data: MutableList<Result>) {
+    fun submitData(data: MutableList<Episode>) {
         episodesResults.clear()
         episodesResults.addAll(data)
         notifyDataSetChanged()
