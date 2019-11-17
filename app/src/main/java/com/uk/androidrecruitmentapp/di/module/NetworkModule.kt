@@ -1,17 +1,22 @@
 package com.uk.androidrecruitmentapp.di.module
 
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.uk.androidrecruitmentapp.BuildConfig
 import com.uk.androidrecruitmentapp.data.remote.ApiService
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 private const val BASE_URL = "https://rickandmortyapi.com/api/"
+private const val CONNECT_TIMEOUT = 10L
+private const val READ_TIMEOUT = 10L
+private const val WRITE_TIMEOUT = 10L
 
 @Module(
         includes = [
@@ -25,43 +30,42 @@ abstract class NetworkModule {
 
         @Provides
         @Singleton
-        internal fun providesGson(): Gson {
-            return GsonBuilder().create()
+        fun provideOkHttpClientBuilder(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+            val builder = OkHttpClient.Builder()
+                    .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+                    .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+                    .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
+                    .retryOnConnectionFailure(false)
+
+            if (BuildConfig.DEBUG) {
+                builder.addInterceptor(httpLoggingInterceptor)
+            }
+            return builder.build()
         }
 
         @Provides
         @Singleton
-        internal fun providesOkHttpClient(): OkHttpClient {
-            return OkHttpClient.Builder().build()
+        fun provideHttpLoggingInterceptor() = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
         }
 
         @Provides
         @Singleton
-        internal fun providesGsonConverterFactory(gson: Gson): GsonConverterFactory {
-            return GsonConverterFactory.create(gson)
-        }
+        fun provideGsonFactory(gson: Gson): GsonConverterFactory = GsonConverterFactory.create(gson)
 
         @Provides
         @Singleton
-        internal fun providesRx2JavaCallAdapterFactory(): RxJava2CallAdapterFactory {
-            return RxJava2CallAdapterFactory.create()
-        }
-
-        @Provides
-        @Singleton
-        internal fun providesRetrofit(gsonConverterFactory: GsonConverterFactory, okHttpClient: OkHttpClient,
-                                      rxJava2CallAdapterFactory: RxJava2CallAdapterFactory): Retrofit {
-            return Retrofit.Builder().addConverterFactory(gsonConverterFactory)
-                    .addCallAdapterFactory(rxJava2CallAdapterFactory)
+        fun provideUnauthorizedApiService(
+                httpClient: OkHttpClient,
+                gsonConverterFactory: GsonConverterFactory
+        ): ApiService {
+            return Retrofit.Builder()
+                    .client(httpClient)
+                    .addCallAdapterFactory(CoroutineCallAdapterFactory())
+                    .addConverterFactory(gsonConverterFactory)
                     .baseUrl(BASE_URL)
-                    .client(okHttpClient)
                     .build()
-        }
-
-        @Provides
-        @Singleton
-        internal fun provideApiService(retrofit: Retrofit): ApiService {
-            return retrofit.create<ApiService>(ApiService::class.java)
+                    .create(ApiService::class.java)
         }
     }
 }
