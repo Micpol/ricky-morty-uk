@@ -8,6 +8,8 @@ import com.uk.androidrecruitmentapp.feature.episodes.EpisodesVM
 import com.uk.androidrecruitmentapp.feature.episodes.EpisodesVMImpl
 import com.uk.androidrecruitmentapp.feature.locations.LocationsVM
 import com.uk.androidrecruitmentapp.feature.locations.LocationsVMImpl
+import com.uk.androidrecruitmentapp.ui.SplashVM
+import com.uk.androidrecruitmentapp.ui.SplashVMImpl
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -32,5 +34,10 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(LocationsVM::class)
     abstract fun provideLocationsVM(vm: LocationsVMImpl): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SplashVM::class)
+    abstract fun provideSplashVM(vm: SplashVMImpl): ViewModel
 
 }
