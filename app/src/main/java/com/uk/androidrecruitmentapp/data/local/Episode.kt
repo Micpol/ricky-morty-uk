@@ -1,10 +1,5 @@
 package com.uk.androidrecruitmentapp.data.local
 
-data class Episodes(
-        val info: Info? = null,
-        val results: List<Episode> = emptyList()
-)
-
 data class Episode(
         val id: Int,
         val name: String,
