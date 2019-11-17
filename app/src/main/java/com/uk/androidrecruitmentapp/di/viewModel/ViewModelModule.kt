@@ -6,6 +6,8 @@ import com.uk.androidrecruitmentapp.feature.characters.CharactersVM
 import com.uk.androidrecruitmentapp.feature.characters.CharactersVMImpl
 import com.uk.androidrecruitmentapp.feature.episodes.EpisodesVM
 import com.uk.androidrecruitmentapp.feature.episodes.EpisodesVMImpl
+import com.uk.androidrecruitmentapp.feature.locations.LocationsVM
+import com.uk.androidrecruitmentapp.feature.locations.LocationsVMImpl
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -25,5 +27,10 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(CharactersVM::class)
     abstract fun provideCharactersVM(vm: CharactersVMImpl): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(LocationsVM::class)
+    abstract fun provideLocationsVM(vm: LocationsVMImpl): ViewModel
 
 }
