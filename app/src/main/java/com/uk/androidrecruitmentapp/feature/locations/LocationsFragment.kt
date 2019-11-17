@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.uk.androidrecruitmentapp.BaseFragment
 import com.uk.androidrecruitmentapp.R
 import com.uk.androidrecruitmentapp.feature.locations.list.LocationsAdapter
+import com.uk.androidrecruitmentapp.utils.addOnScrolledEvent
 import com.uk.androidrecruitmentapp.utils.getVM
 import kotlinx.android.synthetic.main.fragment_locations.*
 import javax.inject.Inject
 
 class LocationsFragment : BaseFragment() {
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -37,7 +39,11 @@ class LocationsFragment : BaseFragment() {
     private fun setupList() {
         locationsRV.apply {
             adapter = locationsAdapter
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            layoutManager = linearLayoutManager
+            addOnScrolledEvent {
+                viewModel.onListScrolled(linearLayoutManager.findLastCompletelyVisibleItemPosition(), locationsAdapter.itemCount)
+            }
         }
     }
 
