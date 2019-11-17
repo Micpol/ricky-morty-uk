@@ -2,7 +2,7 @@ package com.uk.androidrecruitmentapp
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.uk.androidrecruitmentapp.data.local.Result
+import com.uk.androidrecruitmentapp.data.local.Episode
 import com.uk.androidrecruitmentapp.data.source.Resource
 import com.uk.androidrecruitmentapp.feature.episodes.EpisodesRepository
 import com.uk.androidrecruitmentapp.feature.episodes.EpisodesVMImpl
@@ -26,12 +26,12 @@ class EpisodesVMImplTest {
     @get:Rule
     var rule = InstantTaskExecutorRule()
 
-    private var loadEpisodesResponse: () -> Resource<List<Result>> = { Resource.Success(emptyList()) }
+    private var loadEpisodesResponse: () -> Resource<List<Episode>> = { Resource.Success(emptyList()) }
     private val repository = mockk<EpisodesRepository> {
         coEvery { loadEpisodes() } returns loadEpisodesResponse.invoke()
     }
 
-    private val episodesListObserver = mockk<Observer<List<Result>>>(relaxed = true)
+    private val episodesListObserver = mockk<Observer<List<Episode>>>(relaxed = true)
     private val toastMessageObserver = mockk<Observer<String>>(relaxed = true)
     private val progressVisibilityObserver = mockk<Observer<Boolean>>(relaxed = true)
 

@@ -1,6 +1,7 @@
 package com.uk.androidrecruitmentapp.data.source
 
-import com.uk.androidrecruitmentapp.data.local.Result
+import com.uk.androidrecruitmentapp.data.local.Character
+import com.uk.androidrecruitmentapp.data.local.Episode
 import com.uk.androidrecruitmentapp.data.remote.ApiService
 import com.uk.androidrecruitmentapp.data.remote.RequestExecutor
 import com.uk.androidrecruitmentapp.data.remote.response.ApiResponse
@@ -14,13 +15,23 @@ class NetworkDataSource @Inject constructor(
 
 ) : DataSource {
 
-    override suspend fun loadEpisodes(): Resource<List<Result>> {
+    override suspend fun loadEpisodes(): Resource<List<Episode>> {
         return when (val value = requestExecutor.execute(apiService.loadEpisodesAsync())) {
             is ApiResponse.Success -> {
                 val list = value.data.results
                 ApiResponse.Success(list)
             }
             is ApiResponse.Error -> value
+        }.toResource()
+    }
+
+    override suspend fun loadCharacters(): Resource<List<Character>> {
+        return when (val response = requestExecutor.execute(apiService.loadCharactersAsync())) {
+            is ApiResponse.Success -> {
+                val list = response.data.results
+                ApiResponse.Success(list)
+            }
+            is ApiResponse.Error -> response
         }.toResource()
     }
 }
