@@ -61,5 +61,12 @@ class LocationsFragment : BaseFragment() {
         viewModel.toastMessage.observe(this, Observer { errorMsgResId ->
             context?.let { Toast.makeText(it, errorMsgResId, Toast.LENGTH_SHORT).show() }
         })
+        viewModel.loadingMoreVisibility.observe(this, Observer {
+            if (it) {
+                locationsAdapter.showLoading()
+            } else {
+                locationsAdapter.hideLoading()
+            }
+        })
     }
 }

@@ -47,8 +47,8 @@ class LocationsVMImpl @Inject constructor(
         locations.map {
             if (it is Resource.Success) {
                 isThereNextPage = it.data.info.next.isNotEmpty()
-                loadingMoreVisibility.postValue(false)
                 isLoadingMore = false
+                loadingMoreVisibility.postValue(isLoadingMore)
                 it.data.results
             } else {
                 onError(it)
@@ -77,14 +77,13 @@ class LocationsVMImpl @Inject constructor(
         if (isLoadingMore || !isThereNextPage) return
         if (lastCompletelyVisibleItemPosition == itemCount - 1) {
             isLoadingMore = true
-            loadingMoreVisibility.postValue(isLoadingMore)
             loadNextPage()
         }
     }
 
     private fun loadNextPage() {
         currentPage++
-        isLoadingMore = false
+        loadingMoreVisibility.postValue(isLoadingMore)
         loadEpisodes(currentPage)
     }
 }

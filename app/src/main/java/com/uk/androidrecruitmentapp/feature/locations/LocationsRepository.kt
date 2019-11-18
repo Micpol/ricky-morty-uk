@@ -14,7 +14,6 @@ class LocationsRepository @Inject constructor(
 
 ) {
 
-
     suspend fun loadLocations(page: Int?): Resource<RickyAndMortyResponse<Location>> {
         return withContext(Dispatchers.IO) {
             networkDataSource.loadLocations(page)
