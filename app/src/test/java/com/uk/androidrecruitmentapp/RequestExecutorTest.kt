@@ -1,7 +1,6 @@
 package com.uk.androidrecruitmentapp
 
 import com.uk.androidrecruitmentapp.data.local.Episode
-import com.uk.androidrecruitmentapp.data.local.Episodes
 import com.uk.androidrecruitmentapp.data.local.RickyAndMortyResponse
 import com.uk.androidrecruitmentapp.data.remote.ApiService
 import com.uk.androidrecruitmentapp.data.remote.RequestExecutor
@@ -51,7 +50,7 @@ class RequestExecutorTest {
     @Test(expected = HttpException::class)
     fun `connection error`() = runBlockingTest {
         every { service.loadEpisodesAsync() } throws HttpException(
-                Response.error<Episodes>(401, EMPTY_RESPONSE)
+                Response.error<Episode>(401, EMPTY_RESPONSE)
         )
 
         val response = requestExecutor.execute(service.loadEpisodesAsync())

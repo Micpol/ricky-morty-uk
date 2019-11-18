@@ -11,7 +11,7 @@ class EpisodesRepository @Inject constructor(
 
 ) {
 
-    suspend fun loadEpisodes(page: Int?) = withContext(Dispatchers.IO) {
+    suspend fun loadEpisodes(page: Int? = null) = withContext(Dispatchers.IO) {
         networkDataSource.loadEpisodes(page)
     }
 }
