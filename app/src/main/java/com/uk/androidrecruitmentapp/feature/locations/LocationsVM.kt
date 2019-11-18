@@ -1,21 +1,23 @@
 package com.uk.androidrecruitmentapp.feature.locations
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.uk.androidrecruitmentapp.data.livedata.MutableSingleLiveEvent
 import com.uk.androidrecruitmentapp.data.livedata.SingleLiveEvent
 import com.uk.androidrecruitmentapp.data.local.Location
 import com.uk.androidrecruitmentapp.data.local.RickyAndMortyResponse
 import com.uk.androidrecruitmentapp.data.source.Resource
+import com.uk.androidrecruitmentapp.feature.base.PagingViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-abstract class LocationsVM : ViewModel() {
-    abstract fun onListScrolled(lastCompletelyVisibleItemPosition: Int, itemCount: Int)
+abstract class LocationsVM : PagingViewModel() {
 
     abstract val locationsList: LiveData<List<Location>>
     abstract val progressVisibility: LiveData<Boolean>
     abstract val toastMessage: SingleLiveEvent<String>
-    abstract val loadingMoreVisibility: LiveData<Boolean>
 
 }
 
@@ -27,15 +29,11 @@ class LocationsVMImpl @Inject constructor(
 
     private val locations by lazy { MutableLiveData<Resource<RickyAndMortyResponse<Location>>>() }
 
-    private var isLoadingMore = false
-    private var currentPage = 1
-    private var isThereNextPage = true
-
     init {
-        loadEpisodes(null)
+        loadLocations()
     }
 
-    private fun loadEpisodes(page: Int? = null) {
+    private fun loadLocations(page: Int? = null) {
         locations.postValue(Resource.Loading)
         viewModelScope.launch {
             val loadLocations = repository.loadLocations(page)
@@ -63,27 +61,19 @@ class LocationsVMImpl @Inject constructor(
         }
     }
 
-    override val toastMessage by lazy { MutableSingleLiveEvent<String>() }
-
-    override val loadingMoreVisibility by lazy { MutableLiveData<Boolean>(false) }
-
     private fun onError(resource: Resource<RickyAndMortyResponse<Location>>) {
         if (resource is Resource.Error) {
             toastMessage.postValue(resource.error.message)
         }
     }
 
-    override fun onListScrolled(lastCompletelyVisibleItemPosition: Int, itemCount: Int) {
-        if (isLoadingMore || !isThereNextPage) return
-        if (lastCompletelyVisibleItemPosition == itemCount - 1) {
-            isLoadingMore = true
-            loadNextPage()
-        }
-    }
+    override val toastMessage by lazy { MutableSingleLiveEvent<String>() }
 
-    private fun loadNextPage() {
+    override val loadingMoreVisibility by lazy { MutableLiveData<Boolean>(false) }
+
+    override fun loadNextPage() {
         currentPage++
         loadingMoreVisibility.postValue(isLoadingMore)
-        loadEpisodes(currentPage)
+        loadLocations(currentPage)
     }
 }
