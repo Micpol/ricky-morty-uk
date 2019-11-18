@@ -11,7 +11,7 @@ class CharactersRepository @Inject constructor(
 
 ) {
 
-    suspend fun loadCharacters() = withContext(Dispatchers.IO) {
-        networkDataSource.loadCharacters()
+    suspend fun loadCharacters(page: Int? = null) = withContext(Dispatchers.IO) {
+        networkDataSource.loadCharacters(page)
     }
 }

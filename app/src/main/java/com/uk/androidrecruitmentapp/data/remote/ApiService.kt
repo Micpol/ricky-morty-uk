@@ -15,7 +15,7 @@ interface ApiService {
     fun loadEpisodesAsync(@Query("page") page: Int? = null): Deferred<Response<RickyAndMortyResponse<Episode>>>
 
     @GET("character/")
-    fun loadCharactersAsync(): Deferred<Response<RickyAndMortyResponse<Character>>>
+    fun loadCharactersAsync(@Query("page") page: Int? = null): Deferred<Response<RickyAndMortyResponse<Character>>>
 
     @GET("location/")
     fun loadLocationsAsync(@Query("page") page: Int? = null): Deferred<Response<RickyAndMortyResponse<Location>>>
