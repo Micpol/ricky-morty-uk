@@ -8,7 +8,7 @@ import com.uk.androidrecruitmentapp.data.local.RickyAndMortyResponse
 interface DataSource {
     suspend fun loadEpisodes(page: Int?): Resource<RickyAndMortyResponse<Episode>>
 
-    suspend fun loadCharacters(): Resource<List<Character>>
+    suspend fun loadCharacters(page: Int?): Resource<RickyAndMortyResponse<Character>>
 
     suspend fun loadLocations(page: Int?): Resource<RickyAndMortyResponse<Location>>
 }

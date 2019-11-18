@@ -3,12 +3,10 @@ package com.uk.androidrecruitmentapp.feature.episodes.list
 import android.view.ViewGroup
 import com.uk.androidrecruitmentapp.R
 import com.uk.androidrecruitmentapp.data.local.Episode
-import com.uk.androidrecruitmentapp.data.local.Location
 import com.uk.androidrecruitmentapp.feature.base.BaseAdapter
 import com.uk.androidrecruitmentapp.feature.base.BaseViewHolder
 import com.uk.androidrecruitmentapp.feature.episodes.list.viewholder.EpisodeViewHolder
 import com.uk.androidrecruitmentapp.feature.locations.list.viewholder.LoadingViewHolder
-import com.uk.androidrecruitmentapp.feature.locations.list.viewholder.LocationsViewHolder
 import com.uk.androidrecruitmentapp.utils.layoutInflater
 
 class EpisodeAdapter : BaseAdapter<Episode>() {
