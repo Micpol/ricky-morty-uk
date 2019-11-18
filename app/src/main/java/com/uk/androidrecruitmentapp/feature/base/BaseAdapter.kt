@@ -1,6 +1,5 @@
 package com.uk.androidrecruitmentapp.feature.base
 
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 
 abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewHolder<*>>() {
@@ -33,13 +32,11 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewHolder<*>>() {
     }
 
     fun showLoading() {
-        Log.d("BaseAdapter", "showLoading: ");
         data.add(null)
         notifyItemInserted(data.size - 1)
     }
 
     fun hideLoading() {
-        Log.d("BaseAdapter", "hideLoading: ");
         val position = data.indexOf(null)
         data.remove(null)
         notifyItemRemoved(position)
