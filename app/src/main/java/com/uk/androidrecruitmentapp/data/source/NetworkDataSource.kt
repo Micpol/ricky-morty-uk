@@ -17,10 +17,10 @@ class NetworkDataSource @Inject constructor(
 
 ) : DataSource {
 
-    override suspend fun loadEpisodes(): Resource<List<Episode>> {
+    override suspend fun loadEpisodes(page: Int?): Resource<RickyAndMortyResponse<Episode>> {
         return when (val response = requestExecutor.execute(apiService.loadEpisodesAsync())) {
             is ApiResponse.Success -> {
-                val list = response.data.results
+                val list = response.data
                 ApiResponse.Success(list)
             }
             is ApiResponse.Error -> response

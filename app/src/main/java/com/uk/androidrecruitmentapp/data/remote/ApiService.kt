@@ -12,7 +12,7 @@ import retrofit2.http.Query
 interface ApiService {
 
     @GET("episode/")
-    fun loadEpisodesAsync(): Deferred<Response<RickyAndMortyResponse<Episode>>>
+    fun loadEpisodesAsync(@Query("page") page: Int? = null): Deferred<Response<RickyAndMortyResponse<Episode>>>
 
     @GET("character/")
     fun loadCharactersAsync(): Deferred<Response<RickyAndMortyResponse<Character>>>
