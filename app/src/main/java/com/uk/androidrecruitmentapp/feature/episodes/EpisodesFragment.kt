@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.uk.androidrecruitmentapp.BaseFragment
 import com.uk.androidrecruitmentapp.R
 import com.uk.androidrecruitmentapp.feature.episodes.list.EpisodeAdapter
+import com.uk.androidrecruitmentapp.utils.addOnScrolledEvent
 import com.uk.androidrecruitmentapp.utils.getVM
 import kotlinx.android.synthetic.main.fragment_episodes.*
 import javax.inject.Inject
@@ -38,7 +39,11 @@ class EpisodesFragment : BaseFragment() {
     private fun setupList() {
         episodesRV.apply {
             adapter = episodesAdapter
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            layoutManager = linearLayoutManager
+            addOnScrolledEvent {
+                viewModel.onListScrolled(linearLayoutManager.findLastCompletelyVisibleItemPosition(), episodesAdapter.itemCount)
+            }
         }
     }
 
@@ -55,6 +60,13 @@ class EpisodesFragment : BaseFragment() {
         })
         viewModel.toastMessage.observe(this, Observer { errorMsgResId ->
             context?.let { Toast.makeText(it, errorMsgResId, Toast.LENGTH_SHORT).show() }
+        })
+        viewModel.loadingMoreVisibility.observe(this, Observer {
+            if (it) {
+                episodesAdapter.showLoading()
+            } else {
+                episodesAdapter.hideLoading()
+            }
         })
     }
 }
