@@ -1,37 +1,41 @@
 package com.uk.androidrecruitmentapp.feature.characters.list
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.uk.androidrecruitmentapp.R
 import com.uk.androidrecruitmentapp.data.local.Character
+import com.uk.androidrecruitmentapp.feature.base.BaseAdapter
+import com.uk.androidrecruitmentapp.feature.base.BaseViewHolder
 import com.uk.androidrecruitmentapp.feature.characters.list.viewholder.CharacterViewHolder
+import com.uk.androidrecruitmentapp.feature.locations.list.viewholder.LoadingViewHolder
+import com.uk.androidrecruitmentapp.utils.layoutInflater
 
-class CharactersAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<CharacterViewHolder>() {
+class CharactersAdapter : BaseAdapter<Character>() {
 
-    private val episodesResults = mutableListOf<Character>()
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.characters_item, parent, false)
-        return CharacterViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
+        val layoutInflater = parent.context.layoutInflater
+        return when (viewType) {
+            PROGRESS_BAR -> {
+                val view = layoutInflater.inflate(R.layout.loading_item, parent, false)
+                LoadingViewHolder(view)
+            }
+            ITEM -> {
+                val view = layoutInflater.inflate(R.layout.characters_item, parent, false)
+                CharacterViewHolder(view)
+            }
+            else -> throw IllegalArgumentException("Invalid view type")
+        }
     }
 
-    override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
-        val episode = episodesResults[position]
-        holder.bind(episode)
-    }
-
-    override fun onViewRecycled(holder: CharacterViewHolder) {
-        super.onViewRecycled(holder)
-        holder.clear()
-    }
-
-    override fun getItemCount(): Int {
-        return episodesResults.size
-    }
-
-    fun submitData(data: MutableList<Character>) {
-        episodesResults.clear()
-        episodesResults.addAll(data)
-        notifyDataSetChanged()
+    override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
+        when (holder) {
+            is LoadingViewHolder -> {
+                holder.bind(data[position])
+            }
+            is CharacterViewHolder -> {
+                data[position]?.let {
+                    holder.bind(it)
+                }
+            }
+        }
     }
 }

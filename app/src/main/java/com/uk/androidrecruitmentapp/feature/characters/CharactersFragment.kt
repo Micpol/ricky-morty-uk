@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.uk.androidrecruitmentapp.BaseFragment
 import com.uk.androidrecruitmentapp.R
 import com.uk.androidrecruitmentapp.feature.characters.list.CharactersAdapter
+import com.uk.androidrecruitmentapp.utils.addOnScrolledEvent
 import com.uk.androidrecruitmentapp.utils.getVM
 import kotlinx.android.synthetic.main.fragment_characters.*
 import javax.inject.Inject
@@ -38,7 +39,11 @@ class CharactersFragment : BaseFragment() {
     private fun setupList() {
         charactersRV.apply {
             adapter = charactersAdapter
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            layoutManager = linearLayoutManager
+            addOnScrolledEvent {
+                viewModel.onListScrolled(linearLayoutManager.findLastCompletelyVisibleItemPosition(), charactersAdapter.itemCount)
+            }
         }
     }
 
@@ -55,6 +60,13 @@ class CharactersFragment : BaseFragment() {
         })
         viewModel.toastMessage.observe(this, Observer { errorMsgResId ->
             context?.let { Toast.makeText(it, errorMsgResId, Toast.LENGTH_SHORT).show() }
+        })
+        viewModel.loadingMoreVisibility.observe(this, Observer {
+            if (it) {
+                charactersAdapter.showLoading()
+            } else {
+                charactersAdapter.hideLoading()
+            }
         })
     }
 }
