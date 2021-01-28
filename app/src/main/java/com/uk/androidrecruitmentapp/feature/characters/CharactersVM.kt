@@ -22,9 +22,7 @@ abstract class CharactersVM : PagingViewModel() {
 }
 
 class CharactersVMImpl @Inject constructor(
-
-        private val repository: CharactersRepository
-
+    private val repository: CharactersRepository
 ) : CharactersVM() {
 
     private val characters by lazy { MutableLiveData<Resource<RickyAndMortyResponse<Character>>>() }

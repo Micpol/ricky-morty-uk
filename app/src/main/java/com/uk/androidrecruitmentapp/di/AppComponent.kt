@@ -14,13 +14,13 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-        modules = [
-            AndroidSupportInjectionModule::class,
-            AppModule::class,
-            NetworkModule::class,
-            ActivityContributeModule::class,
-            ViewModelModule::class
-        ]
+    modules = [
+        AndroidSupportInjectionModule::class,
+        AppModule::class,
+        NetworkModule::class,
+        ActivityContributeModule::class,
+        ViewModelModule::class
+    ]
 )
 interface AppComponent : AndroidInjector<ARApplication> {
 

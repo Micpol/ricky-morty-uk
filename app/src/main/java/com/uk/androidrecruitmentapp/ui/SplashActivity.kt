@@ -12,12 +12,11 @@ import com.uk.androidrecruitmentapp.utils.getVM
 import javax.inject.Inject
 
 class SplashActivity : BaseActivity() {
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val viewModel: SplashVM by lazy { getVM<SplashVM>(viewModelFactory) }
-
-    private val locationsAdapter by lazy { LocationsAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

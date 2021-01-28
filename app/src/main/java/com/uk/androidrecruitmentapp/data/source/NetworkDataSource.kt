@@ -11,10 +11,8 @@ import com.uk.androidrecruitmentapp.data.remote.response.toResource
 import javax.inject.Inject
 
 class NetworkDataSource @Inject constructor(
-
-        private val requestExecutor: RequestExecutor,
-        private val apiService: ApiService
-
+    private val requestExecutor: RequestExecutor,
+    private val apiService: ApiService
 ) : DataSource {
 
     override suspend fun loadEpisodes(page: Int?): Resource<RickyAndMortyResponse<Episode>> {

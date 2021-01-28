@@ -5,9 +5,7 @@ import com.uk.androidrecruitmentapp.feature.base.BaseViewHolder
 import kotlinx.android.extensions.LayoutContainer
 
 class LoadingViewHolder(
-
-        override val containerView: View
-
+    override val containerView: View
 ) : BaseViewHolder<Any?>(containerView), LayoutContainer {
 
     override fun bind(item: Any?) {

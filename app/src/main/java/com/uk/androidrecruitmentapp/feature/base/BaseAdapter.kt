@@ -4,13 +4,6 @@ import androidx.recyclerview.widget.RecyclerView
 
 abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewHolder<*>>() {
 
-    companion object {
-
-        const val ITEM = 0
-        const val PROGRESS_BAR = 1
-
-    }
-
     internal val data = mutableListOf<T?>()
 
     override fun getItemViewType(position: Int): Int {
@@ -40,5 +33,10 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewHolder<*>>() {
         val position = data.indexOf(null)
         data.remove(null)
         notifyItemRemoved(position)
+    }
+
+    companion object {
+        const val ITEM = 0
+        const val PROGRESS_BAR = 1
     }
 }
