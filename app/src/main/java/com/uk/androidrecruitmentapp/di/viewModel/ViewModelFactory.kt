@@ -9,15 +9,13 @@ import javax.inject.Singleton
 
 @Singleton
 class ViewModelFactory @Inject constructor(
-
-        private val creators: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>
-
+    private val creators: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val creator = findCreatorClass(modelClass)
-                ?: throw IllegalArgumentException("Unknown model class $modelClass. Check if you added @Provide for $modelClass and annotate it with @${IntoMap::class} and @${ViewModelKey::class}") as Throwable
+            ?: throw IllegalArgumentException("Unknown model class $modelClass. Check if you added @Provide for $modelClass and annotate it with @${IntoMap::class} and @${ViewModelKey::class}") as Throwable
         return creator.get() as T
     }
 

@@ -8,9 +8,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.episodes_item.*
 
 class CharacterViewHolder(
-
-        override val containerView: View
-
+    override val containerView: View
 ) : BaseViewHolder<Character?>(containerView), LayoutContainer {
 
     override fun bind(item: Character?) {

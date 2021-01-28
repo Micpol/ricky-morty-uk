@@ -19,9 +19,9 @@ private const val READ_TIMEOUT = 10L
 private const val WRITE_TIMEOUT = 10L
 
 @Module(
-        includes = [
-            NetworkModule.Providers::class
-        ]
+    includes = [
+        NetworkModule.Providers::class
+    ]
 )
 abstract class NetworkModule {
 
@@ -32,10 +32,10 @@ abstract class NetworkModule {
         @Singleton
         fun provideOkHttpClientBuilder(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
             val builder = OkHttpClient.Builder()
-                    .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
-                    .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
-                    .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
-                    .retryOnConnectionFailure(false)
+                .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+                .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(false)
 
             if (BuildConfig.DEBUG) {
                 builder.addInterceptor(httpLoggingInterceptor)
@@ -56,16 +56,16 @@ abstract class NetworkModule {
         @Provides
         @Singleton
         fun provideUnauthorizedApiService(
-                httpClient: OkHttpClient,
-                gsonConverterFactory: GsonConverterFactory
+            httpClient: OkHttpClient,
+            gsonConverterFactory: GsonConverterFactory
         ): ApiService {
             return Retrofit.Builder()
-                    .client(httpClient)
-                    .addCallAdapterFactory(CoroutineCallAdapterFactory())
-                    .addConverterFactory(gsonConverterFactory)
-                    .baseUrl(BASE_URL)
-                    .build()
-                    .create(ApiService::class.java)
+                .client(httpClient)
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
+                .addConverterFactory(gsonConverterFactory)
+                .baseUrl(BASE_URL)
+                .build()
+                .create(ApiService::class.java)
         }
     }
 }

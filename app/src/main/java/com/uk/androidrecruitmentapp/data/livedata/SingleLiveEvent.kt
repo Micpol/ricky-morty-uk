@@ -34,8 +34,8 @@ abstract class SingleLiveEvent<T> : LiveData<T>() {
     override fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
         if (subscribedObserver != null) {
             Log.w(
-                    TAG,
-                    "Unsubscribing previous observer as only one can be registered to SingleLiveEvent"
+                TAG,
+                "Unsubscribing previous observer as only one can be registered to SingleLiveEvent"
             )
         }
         subscribedObserver = observer

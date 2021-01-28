@@ -8,9 +8,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.episodes_item.*
 
 class LocationsViewHolder(
-
-        override val containerView: View
-
+    override val containerView: View
 ) : BaseViewHolder<Location>(containerView), LayoutContainer {
 
     override fun bind(item: Location) {
