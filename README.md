@@ -42,3 +42,18 @@ so they downloaded some adapter from the web (StackOverflow Driven Development),
 - Tests - Please write unit tests to the MainActivity logic (no need for 100% coverage), just basic scenarios -> presenting list and error handling. You can also write empty tests without implementation to show us what cases you would test.
 
 ## Good luck ; )
+
+# What would I change or add if I had more time:
+
+- Create a better abstraction layer over paging and improve paging in general - using paging library for example
+- Load images(character images for example) with Glide, so that the ui of the app would look somewhat better
+- Fix navigation, because current implementation uses replaces on every fragment transition
+- Replace toasts with snackbars
+- Add proper proguard rules and minification
+- More test cases and ui tests
+- Improve layouts, add theming and styles, some colors and material stuff
+- Fix hardcoded strings
+- Code cleanup like remove unused libraries (RX left, but is not used)
+- Remove deffered for as Jake stated it's deprecated, but it would also need another kind of adapter
+
+

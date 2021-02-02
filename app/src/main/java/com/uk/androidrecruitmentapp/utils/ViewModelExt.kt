@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 
 inline fun <reified T : ViewModel> Fragment.getVM(factory: ViewModelProvider.Factory) =
-        ViewModelProviders.of(this, factory).get(T::class.java)
+    ViewModelProviders.of(this, factory).get(T::class.java)
 
 inline fun <reified T : ViewModel> FragmentActivity.getVM(factory: ViewModelProvider.Factory) =
-        ViewModelProviders.of(this, factory).get(T::class.java)
+    ViewModelProviders.of(this, factory).get(T::class.java)

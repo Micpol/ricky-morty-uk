@@ -22,9 +22,7 @@ abstract class LocationsVM : PagingViewModel() {
 }
 
 class LocationsVMImpl @Inject constructor(
-
-        private val repository: LocationsRepository
-
+    private val repository: LocationsRepository
 ) : LocationsVM() {
 
     private val locations by lazy { MutableLiveData<Resource<RickyAndMortyResponse<Location>>>() }

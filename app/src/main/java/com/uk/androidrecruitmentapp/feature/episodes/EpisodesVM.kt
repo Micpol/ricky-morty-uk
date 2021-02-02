@@ -22,9 +22,7 @@ abstract class EpisodesVM : PagingViewModel() {
 }
 
 class EpisodesVMImpl @Inject constructor(
-
-        private val repository: EpisodesRepository
-
+    private val repository: EpisodesRepository
 ) : EpisodesVM() {
 
     private val episodes by lazy { MutableLiveData<Resource<RickyAndMortyResponse<Episode>>>() }

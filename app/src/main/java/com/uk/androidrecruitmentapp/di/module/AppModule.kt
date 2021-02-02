@@ -11,12 +11,11 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
-
 @Module(
-        includes = [
-            AppModule.Binders::class,
-            AppModule.Providers::class
-        ]
+    includes = [
+        AppModule.Binders::class,
+        AppModule.Providers::class
+    ]
 )
 abstract class AppModule {
 
