@@ -1,8 +1,9 @@
 package com.uk.androidrecruitmentapp.feature.locations.list
 
 import android.view.ViewGroup
-import com.uk.androidrecruitmentapp.R
 import com.uk.androidrecruitmentapp.data.local.Location
+import com.uk.androidrecruitmentapp.databinding.LoadingItemBinding
+import com.uk.androidrecruitmentapp.databinding.LocationsItemBinding
 import com.uk.androidrecruitmentapp.feature.base.BaseAdapter
 import com.uk.androidrecruitmentapp.feature.base.BaseViewHolder
 import com.uk.androidrecruitmentapp.feature.locations.list.viewholder.LoadingViewHolder
@@ -15,12 +16,11 @@ class LocationsAdapter : BaseAdapter<Location>() {
         val layoutInflater = parent.context.layoutInflater
         return when (viewType) {
             PROGRESS_BAR -> {
-                val view = layoutInflater.inflate(R.layout.loading_item, parent, false)
-                LoadingViewHolder(view)
+                LoadingViewHolder(LoadingItemBinding.inflate(layoutInflater))
+
             }
             ITEM -> {
-                val view = layoutInflater.inflate(R.layout.locations_item, parent, false)
-                LocationsViewHolder(view)
+                LocationsViewHolder(LocationsItemBinding.inflate(layoutInflater))
             }
             else -> throw IllegalArgumentException("Invalid view type")
         }

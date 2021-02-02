@@ -1,8 +1,9 @@
 package com.uk.androidrecruitmentapp.feature.characters.list
 
 import android.view.ViewGroup
-import com.uk.androidrecruitmentapp.R
 import com.uk.androidrecruitmentapp.data.local.Character
+import com.uk.androidrecruitmentapp.databinding.CharactersItemBinding
+import com.uk.androidrecruitmentapp.databinding.LoadingItemBinding
 import com.uk.androidrecruitmentapp.feature.base.BaseAdapter
 import com.uk.androidrecruitmentapp.feature.base.BaseViewHolder
 import com.uk.androidrecruitmentapp.feature.characters.list.viewholder.CharacterViewHolder
@@ -15,12 +16,10 @@ class CharactersAdapter : BaseAdapter<Character>() {
         val layoutInflater = parent.context.layoutInflater
         return when (viewType) {
             PROGRESS_BAR -> {
-                val view = layoutInflater.inflate(R.layout.loading_item, parent, false)
-                LoadingViewHolder(view)
+                LoadingViewHolder(LoadingItemBinding.inflate(layoutInflater))
             }
             ITEM -> {
-                val view = layoutInflater.inflate(R.layout.characters_item, parent, false)
-                CharacterViewHolder(view)
+                CharacterViewHolder(CharactersItemBinding.inflate(layoutInflater))
             }
             else -> throw IllegalArgumentException("Invalid view type")
         }

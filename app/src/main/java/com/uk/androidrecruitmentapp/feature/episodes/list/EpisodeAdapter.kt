@@ -1,8 +1,9 @@
 package com.uk.androidrecruitmentapp.feature.episodes.list
 
 import android.view.ViewGroup
-import com.uk.androidrecruitmentapp.R
 import com.uk.androidrecruitmentapp.data.local.Episode
+import com.uk.androidrecruitmentapp.databinding.EpisodesItemBinding
+import com.uk.androidrecruitmentapp.databinding.LoadingItemBinding
 import com.uk.androidrecruitmentapp.feature.base.BaseAdapter
 import com.uk.androidrecruitmentapp.feature.base.BaseViewHolder
 import com.uk.androidrecruitmentapp.feature.episodes.list.viewholder.EpisodeViewHolder
@@ -15,12 +16,11 @@ class EpisodeAdapter : BaseAdapter<Episode>() {
         val layoutInflater = parent.context.layoutInflater
         return when (viewType) {
             PROGRESS_BAR -> {
-                val view = layoutInflater.inflate(R.layout.loading_item, parent, false)
-                LoadingViewHolder(view)
+                LoadingViewHolder(LoadingItemBinding.inflate(layoutInflater))
+
             }
             ITEM -> {
-                val view = layoutInflater.inflate(R.layout.episodes_item, parent, false)
-                EpisodeViewHolder(view)
+                EpisodeViewHolder(EpisodesItemBinding.inflate(layoutInflater))
             }
             else -> throw IllegalArgumentException("Invalid view type")
         }
