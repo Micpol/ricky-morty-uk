@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.uk.androidrecruitmentapp.BaseFragment
-import com.uk.androidrecruitmentapp.databinding.FragmentCharactersBinding
+import com.uk.androidrecruitmentapp.databinding.CharactersFragmentBinding
 import com.uk.androidrecruitmentapp.feature.characters.list.CharactersAdapter
 import com.uk.androidrecruitmentapp.utils.addOnScrolledEvent
 import com.uk.androidrecruitmentapp.utils.getVM
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 class CharactersFragment : BaseFragment() {
 
-    private lateinit var binding: FragmentCharactersBinding
+    private lateinit var binding: CharactersFragmentBinding
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -27,7 +27,7 @@ class CharactersFragment : BaseFragment() {
     private val charactersAdapter by lazy { CharactersAdapter() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentCharactersBinding.inflate(inflater)
+        binding = CharactersFragmentBinding.inflate(inflater)
         return binding.root
     }
 
