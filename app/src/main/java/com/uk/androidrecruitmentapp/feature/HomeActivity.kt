@@ -5,19 +5,22 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.uk.androidrecruitmentapp.BaseActivity
 import com.uk.androidrecruitmentapp.R
-import kotlinx.android.synthetic.main.main_activity.*
+import com.uk.androidrecruitmentapp.databinding.MainActivityBinding
 
 class HomeActivity : BaseActivity() {
 
+    private lateinit var binding: MainActivityBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(R.layout.main_activity)
         setupNavigation()
     }
 
     private fun setupNavigation() {
         NavigationUI.setupWithNavController(
-            mainBottomNavBar,
+            binding.mainBottomNavBar,
             findNavController(R.id.mainNavFragment)
         )
     }
