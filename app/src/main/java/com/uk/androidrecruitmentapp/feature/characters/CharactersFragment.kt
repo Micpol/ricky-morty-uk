@@ -5,29 +5,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.uk.androidrecruitmentapp.BaseFragment
-import com.uk.androidrecruitmentapp.R
+import com.uk.androidrecruitmentapp.databinding.CharactersFragmentBinding
 import com.uk.androidrecruitmentapp.feature.characters.list.CharactersAdapter
 import com.uk.androidrecruitmentapp.utils.addOnScrolledEvent
 import com.uk.androidrecruitmentapp.utils.getVM
-import kotlinx.android.synthetic.main.fragment_characters.*
 import javax.inject.Inject
 
 class CharactersFragment : BaseFragment() {
 
+    private lateinit var binding: CharactersFragmentBinding
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val viewModel: CharactersVM by lazy { getVM<CharactersVM>(viewModelFactory) }
+    private val viewModel: CharactersVM by lazy { getVM(viewModelFactory) }
 
     private val charactersAdapter by lazy { CharactersAdapter() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_characters, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = CharactersFragmentBinding.inflate(inflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,7 +38,7 @@ class CharactersFragment : BaseFragment() {
     }
 
     private fun setupList() {
-        charactersRV.apply {
+        binding.charactersRV.apply {
             adapter = charactersAdapter
             val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             layoutManager = linearLayoutManager
@@ -48,20 +49,20 @@ class CharactersFragment : BaseFragment() {
     }
 
     private fun observe() {
-        viewModel.progressVisibility.observe(this, Observer {
+        viewModel.progressVisibility.observe(viewLifecycleOwner, {
             if (it) {
-                charactersLoadPB.visibility = View.VISIBLE
+                binding.charactersLoadPB.visibility = View.VISIBLE
             } else {
-                charactersLoadPB.visibility = View.GONE
+                binding.charactersLoadPB.visibility = View.GONE
             }
         })
-        viewModel.charactersList.observe(this, Observer {
+        viewModel.charactersList.observe(viewLifecycleOwner, {
             charactersAdapter.submitData(it.toMutableList())
         })
-        viewModel.toastMessage.observe(this, Observer { errorMsgResId ->
+        viewModel.toastMessage.observe(viewLifecycleOwner, { errorMsgResId ->
             context?.let { Toast.makeText(it, errorMsgResId, Toast.LENGTH_SHORT).show() }
         })
-        viewModel.loadingMoreVisibility.observe(this, Observer {
+        viewModel.loadingMoreVisibility.observe(viewLifecycleOwner, {
             if (it) {
                 charactersAdapter.showLoading()
             } else {

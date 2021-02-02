@@ -1,12 +1,11 @@
 package com.uk.androidrecruitmentapp.feature.locations.list.viewholder
 
-import android.view.View
+import com.uk.androidrecruitmentapp.databinding.LoadingItemBinding
 import com.uk.androidrecruitmentapp.feature.base.BaseViewHolder
-import kotlinx.android.extensions.LayoutContainer
 
 class LoadingViewHolder(
-    override val containerView: View
-) : BaseViewHolder<Any?>(containerView), LayoutContainer {
+    binding: LoadingItemBinding
+) : BaseViewHolder<Any?>(binding.root) {
 
     override fun bind(item: Any?) {
         setupVH(item)

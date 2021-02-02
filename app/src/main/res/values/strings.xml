@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AndroidRecruitmentApp</string>
+    <string name="app_name">Rick and Morty</string>
     <string name="episodes">Episodes</string>
     <string name="characters">Characters</string>
     <string name="locations">Locations</string>

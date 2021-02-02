@@ -5,29 +5,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.uk.androidrecruitmentapp.BaseFragment
-import com.uk.androidrecruitmentapp.R
+import com.uk.androidrecruitmentapp.databinding.LocationsFragmentBinding
 import com.uk.androidrecruitmentapp.feature.locations.list.LocationsAdapter
 import com.uk.androidrecruitmentapp.utils.addOnScrolledEvent
 import com.uk.androidrecruitmentapp.utils.getVM
-import kotlinx.android.synthetic.main.fragment_locations.*
 import javax.inject.Inject
 
 class LocationsFragment : BaseFragment() {
 
+    private lateinit var binding: LocationsFragmentBinding
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val viewModel: LocationsVM by lazy { getVM<LocationsVM>(viewModelFactory) }
+    private val viewModel: LocationsVM by lazy { getVM(viewModelFactory) }
 
     private val locationsAdapter by lazy { LocationsAdapter() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_locations, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = LocationsFragmentBinding.inflate(inflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,7 +38,7 @@ class LocationsFragment : BaseFragment() {
     }
 
     private fun setupList() {
-        locationsRV.apply {
+        binding.locationsRV.apply {
             adapter = locationsAdapter
             val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             layoutManager = linearLayoutManager
@@ -48,25 +49,27 @@ class LocationsFragment : BaseFragment() {
     }
 
     private fun observe() {
-        viewModel.progressVisibility.observe(this, Observer {
-            if (it) {
-                locationsLoadPB.visibility = View.VISIBLE
-            } else {
-                locationsLoadPB.visibility = View.GONE
-            }
-        })
-        viewModel.locationsList.observe(this, Observer {
-            locationsAdapter.submitData(it.toMutableList())
-        })
-        viewModel.toastMessage.observe(this, Observer { errorMsgResId ->
-            context?.let { Toast.makeText(it, errorMsgResId, Toast.LENGTH_SHORT).show() }
-        })
-        viewModel.loadingMoreVisibility.observe(this, Observer {
-            if (it) {
-                locationsAdapter.showLoading()
-            } else {
-                locationsAdapter.hideLoading()
-            }
-        })
+        viewModel.run {
+            progressVisibility.observe(viewLifecycleOwner, {
+                if (it) {
+                    binding.locationsLoadPB.visibility = View.VISIBLE
+                } else {
+                    binding.locationsLoadPB.visibility = View.GONE
+                }
+            })
+            locationsList.observe(viewLifecycleOwner, {
+                locationsAdapter.submitData(it.toMutableList())
+            })
+            toastMessage.observe(viewLifecycleOwner, { errorMsgResId ->
+                context?.let { Toast.makeText(it, errorMsgResId, Toast.LENGTH_SHORT).show() }
+            })
+            loadingMoreVisibility.observe(viewLifecycleOwner, {
+                if (it) {
+                    locationsAdapter.showLoading()
+                } else {
+                    locationsAdapter.hideLoading()
+                }
+            })
+        }
     }
 }
