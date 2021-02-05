@@ -9,8 +9,11 @@ import com.uk.androidrecruitmentapp.data.source.NetworkDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+@InstallIn(SingletonComponent::class)
 @Module(
     includes = [
         AppModule.Binders::class,
@@ -19,6 +22,7 @@ import javax.inject.Singleton
 )
 abstract class AppModule {
 
+    @InstallIn(SingletonComponent::class)
     @Module
     abstract class Binders {
 
@@ -30,6 +34,7 @@ abstract class AppModule {
         abstract fun bindNetworkDataSource(networkDataSource: NetworkDataSource): DataSource
     }
 
+    @InstallIn(SingletonComponent::class)
     @Module
     class Providers {
 

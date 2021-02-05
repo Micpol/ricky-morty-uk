@@ -1,5 +1,6 @@
 package com.uk.androidrecruitmentapp.feature.locations
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
@@ -11,7 +12,6 @@ import com.uk.androidrecruitmentapp.data.local.RickyAndMortyResponse
 import com.uk.androidrecruitmentapp.data.source.Resource
 import com.uk.androidrecruitmentapp.feature.base.PagingViewModel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 abstract class LocationsVM : PagingViewModel() {
 
@@ -21,7 +21,7 @@ abstract class LocationsVM : PagingViewModel() {
 
 }
 
-class LocationsVMImpl @Inject constructor(
+class LocationsVMImpl @ViewModelInject constructor(
     private val repository: LocationsRepository
 ) : LocationsVM() {
 

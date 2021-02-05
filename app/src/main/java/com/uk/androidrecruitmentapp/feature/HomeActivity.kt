@@ -1,13 +1,15 @@
 package com.uk.androidrecruitmentapp.feature
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
-import com.uk.androidrecruitmentapp.BaseActivity
 import com.uk.androidrecruitmentapp.R
 import com.uk.androidrecruitmentapp.databinding.MainActivityBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-class HomeActivity : BaseActivity() {
+@AndroidEntryPoint
+class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: MainActivityBinding
 
