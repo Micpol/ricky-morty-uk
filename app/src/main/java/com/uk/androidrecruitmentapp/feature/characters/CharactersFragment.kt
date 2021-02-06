@@ -5,24 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.uk.androidrecruitmentapp.BaseFragment
 import com.uk.androidrecruitmentapp.databinding.CharactersFragmentBinding
 import com.uk.androidrecruitmentapp.feature.characters.list.CharactersAdapter
 import com.uk.androidrecruitmentapp.utils.addOnScrolledEvent
-import com.uk.androidrecruitmentapp.utils.getVM
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CharactersFragment : BaseFragment() {
 
     private lateinit var binding: CharactersFragmentBinding
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private val viewModel: CharactersVM by lazy { getVM(viewModelFactory) }
+    private val viewModel: CharactersVM by viewModels<CharactersVMImpl>()
 
     private val charactersAdapter by lazy { CharactersAdapter() }
 

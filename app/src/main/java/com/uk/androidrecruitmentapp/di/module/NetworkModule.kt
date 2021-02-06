@@ -6,6 +6,8 @@ import com.uk.androidrecruitmentapp.BuildConfig
 import com.uk.androidrecruitmentapp.data.remote.ApiService
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -18,6 +20,7 @@ private const val CONNECT_TIMEOUT = 10L
 private const val READ_TIMEOUT = 10L
 private const val WRITE_TIMEOUT = 10L
 
+@InstallIn(SingletonComponent::class)
 @Module(
     includes = [
         NetworkModule.Providers::class
@@ -25,6 +28,7 @@ private const val WRITE_TIMEOUT = 10L
 )
 abstract class NetworkModule {
 
+    @InstallIn(SingletonComponent::class)
     @Module
     class Providers {
 

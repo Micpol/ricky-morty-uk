@@ -5,24 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.uk.androidrecruitmentapp.BaseFragment
 import com.uk.androidrecruitmentapp.databinding.EpisodesFragmentBinding
 import com.uk.androidrecruitmentapp.feature.episodes.list.EpisodeAdapter
 import com.uk.androidrecruitmentapp.utils.addOnScrolledEvent
-import com.uk.androidrecruitmentapp.utils.getVM
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EpisodesFragment : BaseFragment() {
 
     private lateinit var binding: EpisodesFragmentBinding
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private val viewModel: EpisodesVM by lazy { getVM(viewModelFactory) }
+    private val viewModel: EpisodesVM by viewModels<EpisodesVMImpl>()
 
     private val episodesAdapter by lazy { EpisodeAdapter() }
 

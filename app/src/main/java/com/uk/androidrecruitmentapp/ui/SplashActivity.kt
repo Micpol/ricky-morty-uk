@@ -2,21 +2,17 @@ package com.uk.androidrecruitmentapp.ui
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.uk.androidrecruitmentapp.BaseActivity
 import com.uk.androidrecruitmentapp.R
 import com.uk.androidrecruitmentapp.feature.HomeActivity
-import com.uk.androidrecruitmentapp.feature.locations.list.LocationsAdapter
-import com.uk.androidrecruitmentapp.utils.getVM
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SplashActivity : BaseActivity() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private val viewModel: SplashVM by lazy { getVM<SplashVM>(viewModelFactory) }
+    private val viewModel: SplashVM by viewModels<SplashVMImpl>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
