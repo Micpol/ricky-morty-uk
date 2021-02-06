@@ -26,7 +26,8 @@ private const val WRITE_TIMEOUT = 10L
 @InstallIn(SingletonComponent::class)
 @Module(
     includes = [
-        NetworkModule.Providers::class
+        NetworkModule.Providers::class,
+        NetworkModule.Binders::class
     ]
 )
 abstract class NetworkModule {
