@@ -4,6 +4,9 @@ import com.google.gson.Gson
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.uk.androidrecruitmentapp.BuildConfig
 import com.uk.androidrecruitmentapp.data.remote.ApiService
+import com.uk.androidrecruitmentapp.data.source.DataSource
+import com.uk.androidrecruitmentapp.data.source.NetworkDataSource
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,10 +26,20 @@ private const val WRITE_TIMEOUT = 10L
 @InstallIn(SingletonComponent::class)
 @Module(
     includes = [
-        NetworkModule.Providers::class
+        NetworkModule.Providers::class,
+        NetworkModule.Binders::class
     ]
 )
 abstract class NetworkModule {
+
+    @InstallIn(SingletonComponent::class)
+    @Module
+    abstract class Binders {
+
+        @Binds
+        @Singleton
+        abstract fun bindNetworkDataSource(networkDataSource: NetworkDataSource): DataSource
+    }
 
     @InstallIn(SingletonComponent::class)
     @Module
