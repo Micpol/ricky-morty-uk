@@ -12,7 +12,9 @@ import com.uk.androidrecruitmentapp.BaseFragment
 import com.uk.androidrecruitmentapp.databinding.EpisodesFragmentBinding
 import com.uk.androidrecruitmentapp.feature.episodes.list.EpisodeAdapter
 import com.uk.androidrecruitmentapp.utils.addOnScrolledEvent
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EpisodesFragment : BaseFragment() {
 
     private lateinit var binding: EpisodesFragmentBinding

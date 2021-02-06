@@ -12,7 +12,9 @@ import com.uk.androidrecruitmentapp.BaseFragment
 import com.uk.androidrecruitmentapp.databinding.LocationsFragmentBinding
 import com.uk.androidrecruitmentapp.feature.locations.list.LocationsAdapter
 import com.uk.androidrecruitmentapp.utils.addOnScrolledEvent
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LocationsFragment : BaseFragment() {
 
     private lateinit var binding: LocationsFragmentBinding

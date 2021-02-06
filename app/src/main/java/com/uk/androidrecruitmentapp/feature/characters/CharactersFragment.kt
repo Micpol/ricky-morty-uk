@@ -12,7 +12,9 @@ import com.uk.androidrecruitmentapp.BaseFragment
 import com.uk.androidrecruitmentapp.databinding.CharactersFragmentBinding
 import com.uk.androidrecruitmentapp.feature.characters.list.CharactersAdapter
 import com.uk.androidrecruitmentapp.utils.addOnScrolledEvent
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CharactersFragment : BaseFragment() {
 
     private lateinit var binding: CharactersFragmentBinding

@@ -4,16 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.uk.androidrecruitmentapp.BaseActivity
 import com.uk.androidrecruitmentapp.R
 import com.uk.androidrecruitmentapp.feature.HomeActivity
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SplashActivity : BaseActivity() {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val viewModel: SplashVM by viewModels<SplashVMImpl>()
 
