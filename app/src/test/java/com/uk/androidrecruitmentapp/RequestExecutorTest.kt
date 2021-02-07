@@ -1,10 +1,10 @@
 package com.uk.androidrecruitmentapp
 
-import com.uk.androidrecruitmentapp.data.local.Episode
-import com.uk.androidrecruitmentapp.data.local.RickyAndMortyResponse
-import com.uk.androidrecruitmentapp.data.remote.ApiService
-import com.uk.androidrecruitmentapp.data.remote.RequestExecutor
-import com.uk.androidrecruitmentapp.data.remote.response.ApiResponse
+import com.uk.androidrecruitmentapp.data.model.Episode
+import com.uk.androidrecruitmentapp.data.network.response.RickyAndMortyResponse
+import com.uk.androidrecruitmentapp.data.network.ApiService
+import com.uk.androidrecruitmentapp.data.util.RequestExecutor
+import com.uk.androidrecruitmentapp.data.network.response.ApiResponse
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableDeferred
@@ -28,7 +28,7 @@ class RequestExecutorTest {
     @Test
     fun `success callback is called`() = runBlockingTest {
         every { service.loadEpisodesAsync() } returns CompletableDeferred(
-                Response.success(response)
+            Response.success(response)
         )
 
         val response = requestExecutor.execute(service.loadEpisodesAsync())
@@ -39,7 +39,7 @@ class RequestExecutorTest {
     @Test
     fun `error callback is called`() = runBlockingTest {
         every { service.loadEpisodesAsync() } returns CompletableDeferred(
-                Response.error(401, EMPTY_RESPONSE)
+            Response.error(401, EMPTY_RESPONSE)
         )
 
         val response = requestExecutor.execute(service.loadEpisodesAsync())
@@ -50,7 +50,7 @@ class RequestExecutorTest {
     @Test(expected = HttpException::class)
     fun `connection error`() = runBlockingTest {
         every { service.loadEpisodesAsync() } throws HttpException(
-                Response.error<Episode>(401, EMPTY_RESPONSE)
+            Response.error<Episode>(401, EMPTY_RESPONSE)
         )
 
         val response = requestExecutor.execute(service.loadEpisodesAsync())

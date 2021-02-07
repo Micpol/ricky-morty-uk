@@ -2,12 +2,12 @@ package com.uk.androidrecruitmentapp
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.uk.androidrecruitmentapp.data.local.Episode
-import com.uk.androidrecruitmentapp.data.local.Info
-import com.uk.androidrecruitmentapp.data.local.RickyAndMortyResponse
-import com.uk.androidrecruitmentapp.data.source.Resource
-import com.uk.androidrecruitmentapp.feature.episodes.EpisodesRepository
-import com.uk.androidrecruitmentapp.feature.episodes.EpisodesVMImpl
+import com.uk.androidrecruitmentapp.data.model.Episode
+import com.uk.androidrecruitmentapp.data.model.Info
+import com.uk.androidrecruitmentapp.data.network.response.RickyAndMortyResponse
+import com.uk.androidrecruitmentapp.domain.model.Resource
+import com.uk.androidrecruitmentapp.presentation.episodes.EpisodesRepository
+import com.uk.androidrecruitmentapp.presentation.episodes.EpisodesVMImpl
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
@@ -28,7 +28,8 @@ class EpisodesVMImplTest {
     @get:Rule
     var rule = InstantTaskExecutorRule()
 
-    private var loadEpisodesResponse: () -> Resource<RickyAndMortyResponse<Episode>> = { Resource.Success(RickyAndMortyResponse(Info(0, 0, "", ""), emptyList())) }
+    private var loadEpisodesResponse: () -> Resource<RickyAndMortyResponse<Episode>> =
+        { Resource.Success(RickyAndMortyResponse(Info(0, 0, "", ""), emptyList())) }
     private val repository = mockk<EpisodesRepository> {
         coEvery { loadEpisodes() } returns loadEpisodesResponse.invoke()
     }
