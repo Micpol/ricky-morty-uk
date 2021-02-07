@@ -4,8 +4,8 @@ import com.google.gson.Gson
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.uk.androidrecruitmentapp.BuildConfig
 import com.uk.androidrecruitmentapp.data.network.ApiService
-import com.uk.androidrecruitmentapp.data.network.NetworkDataSource
-import com.uk.androidrecruitmentapp.domain.source.DataSource
+import com.uk.androidrecruitmentapp.data.network.NetworkDataSourceImpl
+import com.uk.androidrecruitmentapp.domain.source.NetworkDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -38,7 +38,7 @@ abstract class NetworkModule {
 
         @Binds
         @Singleton
-        abstract fun bindNetworkDataSource(networkDataSource: NetworkDataSource): DataSource
+        abstract fun bindNetworkDataSource(networkDataSource: NetworkDataSourceImpl): NetworkDataSource
     }
 
     @InstallIn(SingletonComponent::class)

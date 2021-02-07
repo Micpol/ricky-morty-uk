@@ -5,8 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.uk.androidrecruitmentapp.data.model.Episode
-import com.uk.androidrecruitmentapp.data.network.response.RickyAndMortyResponse
+import com.uk.androidrecruitmentapp.data.network.response.GetEpisodesResponse
 import com.uk.androidrecruitmentapp.domain.model.Resource
+import com.uk.androidrecruitmentapp.domain.usecase.GetEpisodeListUseCase
 import com.uk.androidrecruitmentapp.presentation.base.PagingViewModel
 import com.uk.androidrecruitmentapp.presentation.utils.livedata.MutableSingleLiveEvent
 import com.uk.androidrecruitmentapp.presentation.utils.livedata.SingleLiveEvent
@@ -24,19 +25,19 @@ abstract class EpisodesVM : PagingViewModel() {
 
 @HiltViewModel
 class EpisodesVMImpl @Inject constructor(
-    private val repository: EpisodesRepository
+    private val getEpisodesUseCase: GetEpisodeListUseCase
 ) : EpisodesVM() {
 
-    private val episodes by lazy { MutableLiveData<Resource<RickyAndMortyResponse<Episode>>>() }
+    private val episodes by lazy { MutableLiveData<Resource<GetEpisodesResponse>>() }
 
     init {
-        loadEpisodes()
+        loadEpisodes(currentPage)
     }
 
-    private fun loadEpisodes(page: Int? = null) {
+    private fun loadEpisodes(page: Int) {
         episodes.postValue(Resource.Loading)
         viewModelScope.launch {
-            val loadEpisodes = repository.loadEpisodes(page)
+            val loadEpisodes = getEpisodesUseCase.getEpisodes(page)
             episodes.postValue(loadEpisodes)
         }
     }
@@ -62,13 +63,13 @@ class EpisodesVMImpl @Inject constructor(
 
     override val toastMessage by lazy { MutableSingleLiveEvent<String>() }
 
-    private fun onError(resource: Resource<RickyAndMortyResponse<Episode>>) {
+    private fun onError(resource: Resource<GetEpisodesResponse>) {
         if (resource is Resource.Error) {
             toastMessage.postValue(resource.error.message)
         }
     }
 
-    override val loadingMoreVisibility by lazy { MutableLiveData<Boolean>(false) }
+    override val loadingMoreVisibility by lazy { MutableLiveData(false) }
 
     override fun loadNextPage() {
         currentPage++

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.uk.androidrecruitmentapp.data.model.Location
 import com.uk.androidrecruitmentapp.data.network.response.RickyAndMortyResponse
 import com.uk.androidrecruitmentapp.domain.model.Resource
+import com.uk.androidrecruitmentapp.domain.usecase.GetLocationListUseCase
 import com.uk.androidrecruitmentapp.presentation.base.PagingViewModel
 import com.uk.androidrecruitmentapp.presentation.utils.livedata.MutableSingleLiveEvent
 import com.uk.androidrecruitmentapp.presentation.utils.livedata.SingleLiveEvent
@@ -24,19 +25,19 @@ abstract class LocationsVM : PagingViewModel() {
 
 @HiltViewModel
 class LocationsVMImpl @Inject constructor(
-    private val repository: LocationsRepository
+    private val getLocationsUseCase: GetLocationListUseCase
 ) : LocationsVM() {
 
     private val locations by lazy { MutableLiveData<Resource<RickyAndMortyResponse<Location>>>() }
 
     init {
-        loadLocations()
+        loadLocations(currentPage)
     }
 
-    private fun loadLocations(page: Int? = null) {
+    private fun loadLocations(page: Int) {
         locations.postValue(Resource.Loading)
         viewModelScope.launch {
-            val loadLocations = repository.loadLocations(page)
+            val loadLocations = getLocationsUseCase.getLocations(page)
             locations.postValue(loadLocations)
         }
     }

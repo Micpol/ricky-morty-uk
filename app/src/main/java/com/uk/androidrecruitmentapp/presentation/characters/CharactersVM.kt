@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.uk.androidrecruitmentapp.data.model.Character
 import com.uk.androidrecruitmentapp.data.network.response.RickyAndMortyResponse
 import com.uk.androidrecruitmentapp.domain.model.Resource
+import com.uk.androidrecruitmentapp.domain.usecase.GetCharacterListUseCase
 import com.uk.androidrecruitmentapp.presentation.base.PagingViewModel
 import com.uk.androidrecruitmentapp.presentation.utils.livedata.MutableSingleLiveEvent
 import com.uk.androidrecruitmentapp.presentation.utils.livedata.SingleLiveEvent
@@ -24,19 +25,19 @@ abstract class CharactersVM : PagingViewModel() {
 
 @HiltViewModel
 class CharactersVMImpl @Inject constructor(
-    private val repository: CharactersRepository
+    private val getCharactersUseCase: GetCharacterListUseCase
 ) : CharactersVM() {
 
     private val characters by lazy { MutableLiveData<Resource<RickyAndMortyResponse<Character>>>() }
 
     init {
-        loadCharacters()
+        loadCharacters(currentPage)
     }
 
-    private fun loadCharacters(page: Int? = null) {
+    private fun loadCharacters(page: Int) {
         characters.postValue(Resource.Loading)
         viewModelScope.launch {
-            characters.postValue(repository.loadCharacters())
+            characters.postValue(getCharactersUseCase.getCharacters(page))
         }
     }
 
