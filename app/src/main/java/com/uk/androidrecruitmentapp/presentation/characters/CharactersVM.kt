@@ -44,7 +44,7 @@ class CharactersVMImpl @Inject constructor(
     override val charactersList by lazy {
         characters.map {
             if (it is Resource.Success) {
-                isThereNextPage = it.data.info.next.isNotEmpty()
+                isThereNextPage = !it.data.info.next.isNullOrEmpty()
                 isLoadingMore = false
                 loadingMoreVisibility.postValue(isLoadingMore)
                 it.data.results
