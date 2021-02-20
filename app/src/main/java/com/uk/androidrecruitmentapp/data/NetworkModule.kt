@@ -11,18 +11,21 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
+import kotlin.time.ExperimentalTime
 
 private const val BASE_URL = "https://rickandmortyapi.com/api/"
 private const val CONNECT_TIMEOUT = 10L
 private const val READ_TIMEOUT = 10L
 private const val WRITE_TIMEOUT = 10L
 
+@ExperimentalCoroutinesApi
 @InstallIn(SingletonComponent::class)
 @Module(
     includes = [
@@ -32,10 +35,12 @@ private const val WRITE_TIMEOUT = 10L
 )
 abstract class NetworkModule {
 
+    @ExperimentalCoroutinesApi
     @InstallIn(SingletonComponent::class)
     @Module
     abstract class Binders {
 
+        @ExperimentalTime
         @Binds
         @Singleton
         abstract fun bindNetworkDataSource(networkDataSource: NetworkDataSourceImpl): NetworkDataSource

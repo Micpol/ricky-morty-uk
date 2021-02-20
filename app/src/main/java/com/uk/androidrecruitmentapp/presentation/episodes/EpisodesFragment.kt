@@ -1,24 +1,36 @@
 package com.uk.androidrecruitmentapp.presentation.episodes
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.uk.androidrecruitmentapp.databinding.EpisodesFragmentBinding
 import com.uk.androidrecruitmentapp.presentation.base.BaseFragment
 import com.uk.androidrecruitmentapp.presentation.episodes.list.EpisodeAdapter
 import com.uk.androidrecruitmentapp.presentation.utils.addOnScrolledEvent
+import com.uk.androidrecruitmentapp.presentation.utils.addsLifecycleOwner
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.runBlocking
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class EpisodesFragment : BaseFragment() {
 
     private lateinit var binding: EpisodesFragmentBinding
 
+    @FlowPreview
     private val viewModel: EpisodesVM by viewModels<EpisodesVMImpl>()
 
     private val episodesAdapter by lazy { EpisodeAdapter() }
@@ -40,31 +52,44 @@ class EpisodesFragment : BaseFragment() {
             val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             layoutManager = linearLayoutManager
             addOnScrolledEvent {
-                viewModel.onListScrolled(linearLayoutManager.findLastCompletelyVisibleItemPosition(), episodesAdapter.itemCount)
+//                if (linearLayoutManager.findLastCompletelyVisibleItemPosition() == episodesAdapter.itemCount - 1) {
+//                    runBlocking { viewModel.processIntent(EpisodesIntent.LoadNextEpisodes) }
+//                }
             }
         }
     }
 
     private fun observe() {
-        viewModel.progressVisibility.observe(viewLifecycleOwner, {
-            if (it) {
-                binding.listLoaderPB.visibility = View.VISIBLE
-            } else {
-                binding.listLoaderPB.visibility = View.GONE
+        viewModel.singleEvent
+            .onEach { handleSingleEvent(it) }
+            .addsLifecycleOwner(viewLifecycleOwner)
+
+        viewModel.viewState
+            .onEach { render(it) }
+            .addsLifecycleOwner(viewLifecycleOwner)
+
+        intents()
+            .onEach { viewModel.processIntent(it) }
+            .launchIn(lifecycleScope)
+    }
+
+    private fun intents() = merge(
+        flowOf(EpisodesIntent.LoadNextEpisodes, EpisodesIntent.Initial),
+    )
+
+    private fun render(it: EpisodesViewState) {
+        Log.d("LogChannel", "EpisodesFragment render: ${it.episodes.joinToString(separator = "\t")}");
+        episodesAdapter.submitData(it.episodes.toMutableList())
+    }
+
+    private fun handleSingleEvent(event: EpisodesEvent) {
+        when (event) {
+            is EpisodesEvent.GetEpisodes.Failure -> {
+                Log.d("LogChannel", "handleSingleEvent: ${event.error.stackTrace}")
             }
-        })
-        viewModel.episodesList.observe(viewLifecycleOwner, {
-            episodesAdapter.submitData(it.toMutableList())
-        })
-        viewModel.toastMessage.observe(viewLifecycleOwner, { errorMsgResId ->
-            context?.let { Toast.makeText(it, errorMsgResId, Toast.LENGTH_SHORT).show() }
-        })
-        viewModel.loadingMoreVisibility.observe(viewLifecycleOwner, {
-            if (it) {
-                episodesAdapter.showLoading()
-            } else {
-                episodesAdapter.hideLoading()
+            is EpisodesEvent.GetEpisodes.Success -> {
+                Log.d("LogChannel", "handleSingleEvent: ${event.episodes.joinToString()}")
             }
-        })
+        }
     }
 }

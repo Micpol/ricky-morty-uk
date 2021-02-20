@@ -1,4 +1,4 @@
-package com.uk.androidrecruitmentapp.presentation.episodes.list.viewholder
+package com.uk.androidrecruitmentapp.presentation.episodes.list
 
 import com.uk.androidrecruitmentapp.R
 import com.uk.androidrecruitmentapp.data.model.Episode

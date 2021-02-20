@@ -1,79 +1,122 @@
 package com.uk.androidrecruitmentapp.presentation.episodes
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
-import com.uk.androidrecruitmentapp.data.model.Episode
-import com.uk.androidrecruitmentapp.data.network.response.GetEpisodesResponse
-import com.uk.androidrecruitmentapp.domain.model.Resource
+import android.util.Log
+import androidx.lifecycle.*
 import com.uk.androidrecruitmentapp.domain.usecase.GetEpisodeListUseCase
-import com.uk.androidrecruitmentapp.presentation.base.PagingViewModel
-import com.uk.androidrecruitmentapp.presentation.utils.livedata.MutableSingleLiveEvent
-import com.uk.androidrecruitmentapp.presentation.utils.livedata.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
-abstract class EpisodesVM : PagingViewModel() {
+abstract class EpisodesVM : ViewModel() {
 
-    abstract val episodesList: LiveData<List<Episode>>
-    abstract val progressVisibility: LiveData<Boolean>
-    abstract val toastMessage: SingleLiveEvent<String>
+    abstract val singleEvent: Flow<EpisodesEvent>
+    abstract val viewState: StateFlow<EpisodesViewState>
 
+    abstract suspend fun processIntent(intent: EpisodesIntent)
 }
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 @HiltViewModel
 class EpisodesVMImpl @Inject constructor(
     private val getEpisodesUseCase: GetEpisodeListUseCase
 ) : EpisodesVM() {
 
-    private val episodes by lazy { MutableLiveData<Resource<GetEpisodesResponse>>() }
+    private val _eventChannel = Channel<EpisodesEvent>(Channel.BUFFERED)
+    private val _intentFlow = MutableSharedFlow<EpisodesIntent>(extraBufferCapacity = 64)
+
+    override val viewState: StateFlow<EpisodesViewState>
+    override val singleEvent: Flow<EpisodesEvent> get() = _eventChannel.receiveAsFlow()
+
+    override suspend fun processIntent(intent: EpisodesIntent) = _intentFlow.emit(intent)
 
     init {
-        loadEpisodes(currentPage)
+        val initialViewState = EpisodesViewState.initial()
+
+        viewState = merge(
+            _intentFlow.filterIsInstance<EpisodesIntent.Initial>().take(1),
+            _intentFlow.filterNot { it is EpisodesIntent.Initial }
+        )
+            .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
+            .toPartialChangeFlow()
+            .sendSingleEvent()
+            .scan(initialViewState) { vs, change -> change.reduce(vs) }
+            .catch { Log.d("LogChannel", "[EpisodesVMImpl] Throwable: $it") }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.Eagerly,
+                initialViewState
+            )
     }
 
-    private fun loadEpisodes(page: Int) {
-        episodes.postValue(Resource.Loading)
-        viewModelScope.launch {
-            val loadEpisodes = getEpisodesUseCase.getEpisodes(page)
-            episodes.postValue(loadEpisodes)
+    @FlowPreview
+    private fun Flow<EpisodesIntent>.toPartialChangeFlow(): Flow<EpisodesPartialChange> {
+        val getUserChanges = getEpisodesUseCase.getEpisodes(1)
+            .onEach { Log.d("LogChannel", "EpisodesVMImpl toPartialChangeFlow onEach ${it.joinToString { episode -> "${episode.id}" }}") }
+            .map {
+                Log.d("LogChannel", "EpisodesVMImpl toPartialChangeFlow: mapping");
+                EpisodesPartialChange.GetEpisodes.Success(it) as EpisodesPartialChange.GetEpisodes
+            }
+            .onStart {
+                Log.d("LogChannel", "EpisodesVMImpl toPartialChangeFlow: onStart")
+                emit(EpisodesPartialChange.GetEpisodes.Loading)
+            }
+            .catch {
+                Log.d("LogChannel", "EpisodesVMImpl toPartialChangeFlow: catch ${it.stackTrace}")
+                emit(EpisodesPartialChange.GetEpisodes.Error(it))
+            }
+
+        return merge(
+            filterIsInstance<EpisodesIntent.Initial>()
+                .onEach { Log.d("LogChannel", "EpisodesVMImpl filterIsInstance<ViewIntent.Initial>(): ${it::class.java.name}") }
+                .flatMapConcat { getUserChanges },
+            filterIsInstance<EpisodesIntent.LoadNextEpisodes>()
+                .filter { viewState.value.let { !it.isLoading && it.error === null } }
+                .onEach { Log.d("LogChannel", "EpisodesVMImpl filterIsInstance<ViewIntent.LoadNextEpisodes>(): ${it::class.java.name}") }
+                .flatMapFirst { getUserChanges }
+        )
+    }
+
+    private fun Flow<EpisodesPartialChange>.sendSingleEvent(): Flow<EpisodesPartialChange> {
+        return onEach {
+            Log.d("LogChannel", "EpisodesVMImpl sendSingleEvent: $it")
+            val event = when (it) {
+                EpisodesPartialChange.GetEpisodes.Loading -> return@onEach
+                is EpisodesPartialChange.GetEpisodes.Success -> return@onEach
+                is EpisodesPartialChange.GetEpisodes.Error -> EpisodesEvent.GetEpisodes.Failure(it.error)
+            }
+            _eventChannel.send(event)
         }
     }
+}
 
-    override val episodesList by lazy {
-        episodes.map {
-            if (it is Resource.Success) {
-                isThereNextPage = !it.data.info.next.isNullOrEmpty()
-                isLoadingMore = false
-                loadingMoreVisibility.postValue(isLoadingMore)
-                it.data.results
-            } else {
-                onError(it)
-                emptyList()
+@ExperimentalCoroutinesApi
+fun <T, R> Flow<T>.flatMapFirst(transform: suspend (value: T) -> Flow<R>): Flow<R> =
+    map(transform).flattenFirst()
+
+@ExperimentalCoroutinesApi
+fun <T> Flow<Flow<T>>.flattenFirst(): Flow<T> = channelFlow {
+    val outerScope = this
+    val busy = AtomicBoolean(false)
+    collect { inner ->
+        if (busy.compareAndSet(false, true)) {
+            launch {
+                try {
+                    inner.collect { outerScope.send(it) }
+                    busy.set(false)
+                } catch (e: CancellationException) {
+                    // cancel outer scope on cancellation exception, too
+                    outerScope.cancel(e)
+                }
             }
         }
     }
-    override val progressVisibility by lazy {
-        episodes.map {
-            it is Resource.Loading
-        }
-    }
-
-    override val toastMessage by lazy { MutableSingleLiveEvent<String>() }
-
-    private fun onError(resource: Resource<GetEpisodesResponse>) {
-        if (resource is Resource.Error) {
-            toastMessage.postValue(resource.error.message)
-        }
-    }
-
-    override val loadingMoreVisibility by lazy { MutableLiveData(false) }
-
-    override fun loadNextPage() {
-        currentPage++
-        loadingMoreVisibility.postValue(isLoadingMore)
-        loadEpisodes(currentPage)
-    }
 }
+

@@ -6,7 +6,6 @@ import com.uk.androidrecruitmentapp.databinding.EpisodesItemBinding
 import com.uk.androidrecruitmentapp.databinding.LoadingItemBinding
 import com.uk.androidrecruitmentapp.presentation.base.BaseAdapter
 import com.uk.androidrecruitmentapp.presentation.base.BaseViewHolder
-import com.uk.androidrecruitmentapp.presentation.episodes.list.viewholder.EpisodeViewHolder
 import com.uk.androidrecruitmentapp.presentation.locations.list.viewholder.LoadingViewHolder
 import com.uk.androidrecruitmentapp.presentation.utils.layoutInflater
 
