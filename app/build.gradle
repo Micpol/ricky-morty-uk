@@ -42,7 +42,7 @@ ext {
     appCompat = "1.2.0"
     recyclerView = "1.1.0"
     androidHilt = "1.0.0-alpha03"
-    daggerHilt = "2.31.2-alpha"
+    daggerHilt = "2.32-alpha"
 }
 
 dependencies {
