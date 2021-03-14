@@ -17,11 +17,9 @@ import com.uk.androidrecruitmentapp.presentation.utils.addsLifecycleOwner
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.flow.*
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -32,18 +30,19 @@ class EpisodesFragment : BaseFragment() {
 
     @FlowPreview
     private val viewModel: EpisodesVM by viewModels<EpisodesVMImpl>()
+    private val intentChannel = Channel<EpisodesIntent>(Channel.BUFFERED)
 
     private val episodesAdapter by lazy { EpisodeAdapter() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = EpisodesFragmentBinding.inflate(inflater)
+        observe()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupList()
-        observe()
     }
 
     private fun setupList() {
@@ -74,8 +73,11 @@ class EpisodesFragment : BaseFragment() {
     }
 
     private fun intents() = merge(
-        flowOf(EpisodesIntent.LoadNextEpisodes, EpisodesIntent.Initial),
+        flowOf(EpisodesIntent.Initial),
+        intentChannel.consumeAsFlow()
     )
+
+    private fun sentIntent(episodesIntent: EpisodesIntent) = intentChannel.safeOffer(episodesIntent)
 
     private fun render(it: EpisodesViewState) {
         Log.d("LogChannel", "EpisodesFragment render: ${it.episodes.joinToString(separator = "\t")}");
@@ -92,4 +94,8 @@ class EpisodesFragment : BaseFragment() {
             }
         }
     }
+}
+
+fun <T> SendChannel<T>.safeOffer(element: T): Boolean {
+    return runCatching { offer(element) }.getOrDefault(false)
 }

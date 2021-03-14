@@ -7,7 +7,6 @@ import javax.inject.Inject
 
 class GetCharacterListUseCase @Inject constructor(
     private val networkDataSource: NetworkDataSource
-){
+) {
     suspend fun getCharacters(page: Int): Resource<GetCharactersResponse> = networkDataSource.loadCharacters(page)
-
 }

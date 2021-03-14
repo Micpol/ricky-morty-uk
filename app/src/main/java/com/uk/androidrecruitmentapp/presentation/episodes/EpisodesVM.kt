@@ -38,6 +38,7 @@ class EpisodesVMImpl @Inject constructor(
     override suspend fun processIntent(intent: EpisodesIntent) = _intentFlow.emit(intent)
 
     init {
+        Log.d("LogChannel", "EpisodesVMImpl : init");
         val initialViewState = EpisodesViewState.initial()
 
         viewState = merge(
